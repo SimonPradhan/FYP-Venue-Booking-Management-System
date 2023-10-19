@@ -1,5 +1,6 @@
 # FYP-Event-Management-System
 **Description**
+
 This project is my final year project where I am going to make a Event Management System. This system helps user to help locate and book venues for events and functions. 
 
 **Features**
@@ -9,6 +10,8 @@ This project is my final year project where I am going to make a Event Managemen
 
 **Language**
 - Python
-Framework
+
+**Framework**
 - Django
-  
+
+**Sayonara 👋👋**
