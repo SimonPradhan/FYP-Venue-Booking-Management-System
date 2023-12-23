@@ -18,6 +18,10 @@ def login_user(request):
             messages.success(request,('Error logging in - please try again...'))
     return render(request, 'authenticate/login.html')
 
+def signup_user(request):
+    
+    return render(request, 'authenticate/signup.html')
+
 @login_required
 def logoutUser(request):
     logout(request)
