@@ -8,7 +8,7 @@
         {% for venue in list_venue %}
             <div class="col-md-4 mb-4">
                 <div class="card">
-                    <img src="{%{venue.images.url}}" class="card-img-top" alt="{{ venue.name }} Image">
+                    <img src="/media/{{venue.image}}" class="card-img-top" alt="{{ venue.name }} Image">
                     <div class="card-body">
                         <h5 class="card-title">{{ venue.name }}</h5>
                         <ul class="list-unstyled">

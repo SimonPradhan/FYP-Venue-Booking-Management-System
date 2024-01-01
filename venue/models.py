@@ -7,6 +7,7 @@ class Venue(models.Model):
     location = models.CharField(max_length=100)
     price = models.CharField(max_length=100)
     capacity = models.CharField(max_length=100)
+    phone = models.CharField(max_length=100)
     image = models.ImageField(upload_to="images/", null=True, blank=True)
     description = models.TextField()
     def __str__(self):
