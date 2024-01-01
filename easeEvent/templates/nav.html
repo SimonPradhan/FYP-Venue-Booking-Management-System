@@ -23,6 +23,16 @@
               <a class="nav-link" href="{%url 'user:signup'%}">SignUp</a>
             </li>
             {%endif%}
+            <!-- {% if not user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{%url 'user:login'%}">Login Vendor</a>
+            </li>
+            {%endif%}
+            {% if not user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{%url 'user:login'%}">SignUp Vendor</a>
+            </li> 
+            {%endif%} -->
             {% if user.is_authenticated %}
             <li class="nav-item">
               <a class="nav-link" href="{%url 'user:logout'%}">LogOut</a>

@@ -1,5 +1,26 @@
 {% extends 'base.html' %}
+
 {% block content %}
-    <h1>Hello World</h1>
-    
+    <h1>Hello {{ name }}</h1>
+    <h2>Venues</h2>
+
+    <div class="row">
+        {% for venue in list_venue %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{%{venue.images.url}}" class="card-img-top" alt="{{ venue.name }} Image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ venue.name }}</h5>
+                        <ul class="list-unstyled">
+                            <li><strong>Address:</strong> {{ venue.address }}</li>
+                            <li><strong>Price:</strong> {{ venue.price }}</li>
+                            <li><strong>Capacity:</strong> {{ venue.capacity }}</li>
+                            <li><strong>Phone:</strong> {{ venue.phone }}</li>
+                            <li><strong>Description:</strong> {{ venue.description }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
