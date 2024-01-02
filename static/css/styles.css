@@ -2,3 +2,10 @@
 .font-lobster {
     font-family: 'Lobster Two', cursive;
 }
+.font-montserrat {
+    font-family: 'Montserrat Alternates', sans-serif;
+}
+
+body{
+    background-color: #D7D7D7;
+}
