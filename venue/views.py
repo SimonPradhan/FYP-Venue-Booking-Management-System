@@ -8,3 +8,5 @@ def home(request):
 def vendor(request):
     return render(request,'events/vendor.html', {"name":"name"})
 
+def contactus(request):
+    return render(request,'events/contactus.html')
