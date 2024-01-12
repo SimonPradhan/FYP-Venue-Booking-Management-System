@@ -10,3 +10,7 @@ def vendor(request):
 
 def contactus(request):
     return render(request,'events/contactus.html')
+
+# def message(request):
+
+#     return render(request,'events/message.html'
