@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{%load static%}
+{% load static %}
 
 {% block content %}
     <div class="container text-center">
@@ -11,23 +11,23 @@
     <img src="{% static 'images/venue.png' %}" style="width: 94.9rem;" alt="Responsive image">
     <div class="container mt-3 mb-3">
         <div class="row justify-content-center">
-          <div class="col-md-6">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search Venues...">
-              <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button">Search</button>
-              </div>
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search Venues...">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button">Search</button>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+    </div>
 
     <div class="container sm-4">
         <div class="row">
             {% for venue in list_venue %}
-                <div class="col-md-3 mb-3">
-                    <div class="card ">
-                        <img src="/media/{{venue.image}}" class="card-img-top rounded-top" alt="{{ venue.name }} Image" >
+                <div class="col-md-4 mb-3">
+                    <div class="card" onclick="toggleDescription(this)">
+                        <img src="/media/{{ venue.image }}" class="card-img-top rounded-top" alt="{{ venue.name }} Image" width="400" height="400">
                         <div class="card-body">
                             <h5 class="card-title">{{ venue.name }}</h5>
                             <ul class="list-unstyled">
@@ -35,7 +35,11 @@
                                 <li><strong>Price:</strong> {{ venue.price }}</li>
                                 <li><strong>Capacity:</strong> {{ venue.capacity }}</li>
                                 <li><strong>Phone:</strong> {{ venue.phone }}</li>
-                                <li><strong>Description:</strong> {{ venue.description }}</li>
+                                <div class="description" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;">
+                                    <li><strong>Description:</strong>
+                                    {{ venue.description }}
+                                    </li>
+                                </div>
                             </ul>
                         </div>
                     </div>
@@ -43,4 +47,19 @@
             {% endfor %}
         </div>
     </div>
+
+    <script>
+        function toggleDescription(card) {
+            const descriptionDiv = card.querySelector('.description');
+            const maxHeight = descriptionDiv.scrollHeight;
+            descriptionDiv.style.maxHeight = descriptionDiv.style.maxHeight === '0px' ? maxHeight + 'px' : '0px';
+
+            // Scroll towards the description 50% of the way
+            const halfwayPoint = window.innerHeight / 2;
+            descriptionDiv.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+
+            // Alternatively, you can scroll to a specific offset if you want more control
+            window.scrollBy(0, halfwayPoint);
+        }
+    </script>
 {% endblock %}
