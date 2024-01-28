@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-3 mb-3">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search Venues...">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        {% for venue in list_venue %}
+            <div class="col-md-4 mb-3">
+                <div class="card" style="cursor: pointer;" data-toggle="modal" data-target="#venueModal{{ venue.id }}">
+                    <img src="/media/{{ venue.image }}" class="card-img-top rounded-top" alt="{{ venue.name }} Image" width="400" height="400">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ venue.name }}</h5>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="venueModal{{ venue.id }}" tabindex="-1" role="dialog" aria-labelledby="venueModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="venueModalLabel">{{ venue.name }}</h5>
+                                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button> -->
+                            </div>
+                            <div class="modal-body">
+                                <p><strong>Address:</strong> {{ venue.address }}</p>
+                                <p><strong>Price:</strong> {{ venue.price }} (per plate)</p>
+                                <p><strong>Capacity:</strong> {{ venue.capacity }} people</p>
+                                <p><strong>Phone:</strong> {{ venue.phone }}</p>
+                                <p><strong>Description:</strong> {{ venue.description }}</p>
+                                <!-- Add more details as needed -->
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <a href="{% url 'venue:partData' venue.id %}" class="btn btn-primary">Go to Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

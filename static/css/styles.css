@@ -1,11 +1,12 @@
 /* styles.css or your custom stylesheet */
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@300&family=Montserrat:wght@500&display=swap');
 
 .font-lobster {
     font-family: 'Lobster Two', cursive;
 }
 .font-montserrat {
-    font-family: 'Montserrat Alternates', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 body{

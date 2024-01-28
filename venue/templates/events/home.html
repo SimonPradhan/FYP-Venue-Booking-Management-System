@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
     <div class="container text-center">
         <div class="font-montserrat">
@@ -12,39 +11,50 @@
     <div class="container mt-3 mb-3">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search Venues...">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button">Search</button>
+                <form class="d-flex" role="search" method="post">
+                    <div class="input-group">
+                        <input type="search" class="form-control" placeholder="Search Venues..." aria-label="search" name="search">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button">Search</button>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 
     <div class="container sm-4">
         <div class="row">
+            {% if search_data %}
+            <h3>Search Results for "{{ search_data }}":</h3>
+            {% for venue in data %}
+                <!-- Display search results -->
+            {% endfor %}
+        {% else %}
             {% for venue in list_venue %}
                 <div class="col-md-4 mb-3">
-                    <div class="card" onclick="toggleDescription(this)">
+                    <div class="card" onclick="toggleDescription(this)" style="cursor:pointer;">
                         <img src="/media/{{ venue.image }}" class="card-img-top rounded-top" alt="{{ venue.name }} Image" width="400" height="400">
                         <div class="card-body">
                             <h5 class="card-title">{{ venue.name }}</h5>
                             <ul class="list-unstyled">
                                 <li><strong>Address:</strong> {{ venue.address }}</li>
-                                <li><strong>Price:</strong> {{ venue.price }}</li>
-                                <li><strong>Capacity:</strong> {{ venue.capacity }}</li>
+                                <li><strong>Price:</strong> {{ venue.price }} (per plates)</li>
+                                <li><strong>Capacity:</strong> {{ venue.capacity }} people</li>
                                 <li><strong>Phone:</strong> {{ venue.phone }}</li>
                                 <div class="description" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;">
                                     <li><strong>Description:</strong>
                                     {{ venue.description }}
                                     </li>
+                                    <a href="{% url 'venue:payment' %}" class="btn btn-primary">Book Now</a>
+                                    <!-- <button class="btn btn-primary" onclick="window.location.href='{% url 'venue:payment'%}'">Book Now</button> -->
                                 </div>
                             </ul>
                         </div>
                     </div>
                 </div>
             {% endfor %}
+        {% endif %}
         </div>
     </div>
 

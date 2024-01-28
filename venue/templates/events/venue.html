@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<a href="{% url 'venue:explore' %}" class="btn btn-primary mt-3 ml-3 mb-3">
+    <i class="bi bi-arrow-left"></i> Back to Explore
+</a>
+<div class="container">
+    <div class="row">
+        <div class="d-flex justify-content-between">
+            <!-- Image on the left side -->
+            <div>
+                <img src="/media/{{ venue.image }}" alt="{{ venue.name }} Image" class="img-fluid" style="max-width: 400px;">
+            </div>
+
+            <!-- Details on the right side -->
+            <div class="ml-4">
+                <h2>{{ venue.name }}</h2>
+                <ul class="list-unstyled">
+                    <li><strong>Address:</strong> {{ venue.address }}</li>
+                    <li><strong>Price:</strong> {{ venue.price }} (per plate)</li>
+                    <li><strong>Capacity:</strong> {{ venue.capacity }} people</li>
+                    <li><strong>Phone:</strong> {{ venue.phone }}</li>
+                    <li><strong>Description:</strong> {{ venue.description }}</li>
+                </ul>
+                <!-- Add more details as needed -->
+
+                <!-- Back button to explore page with icon -->
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <!-- Calendar section -->
+        <div class="col-md-6">
+            <h3>Calendar</h3>
+            <div id="Calendar" style="height: 400px;"></div>
+        </div>
+
+        <!-- Map section -->
+        <div class="col-md-6">
+            <h3>Map</h3>
+            <div id="map" style="height: 400px;"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
