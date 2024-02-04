@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/vendor.css' %}">
+    <style>
+        body {
+            display: flex;
+            background-color: #45455D;
+        }
+
+        .sidebar {
+            /* Specify your sidebar styles */
+            width: 185px;
+            height: 100%;
+            background-color: #8988AA; /* Adjust the background color as needed */
+            color: #fff;
+            position: fixed; /* Make the sidebar fixed */
+            left: 0; /* Move sidebar to the right */
+            top: 0;
+            overflow-y: auto; /* Enable vertical scrolling if needed */
+        }
+
+        .content {
+            /* Specify your main content styles */
+            flex: 1;
+            padding: 20px; /* Adjust padding as needed */
+            background-color: #45455D;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <div class="sidebar">
+        {% include 'sidebar.html' %}
+    </div>
+
+</body>
+
+</html>

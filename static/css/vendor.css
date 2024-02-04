@@ -1,0 +1,51 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@300&family=Montserrat:wght@500&display=swap');
+
+.main{
+    margin: 0px 0px 0px 200px;
+}
+
+.custom-row {
+  height: calc((100vh - 65vh) / 2);
+}
+.custom-row:last-child {
+  height: 60vh;
+}
+.custom-col {
+  border: 1px solid #ccc;
+  background-color: #8988AA;
+}
+.first-row-bg {
+  align-items: center;
+  background-image: url('https://images.unsplash.com/photo-1510076857177-7470076d4098?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  background-size: fill;
+  background-position: calc(100% + 400px) 0px;
+}
+
+#rowBox{
+    padding: 12px;
+
+}
+
+#boxes{
+    margin: 0px 10px 0px 10px;
+    border: 1px solid #ccc;
+    background-color: #8988AA;
+    border-radius: 10px;
+}
+
+.box{
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 1.5rem;
+    margin-right: 70%;
+    border-radius: 10px;
+}
+
+#lastRow {
+  background-color: #f8f9fa;
+  height: 60vh;
+}
+
+.font-lobster {
+    font-family: 'Lobster Two', cursive;
+}

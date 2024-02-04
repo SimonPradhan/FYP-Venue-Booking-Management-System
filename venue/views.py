@@ -9,9 +9,6 @@ def home(request):
         return render(request, 'events/home.html', {'data': data})
     return render(request,'events/home.html', {"name":"name", "list_venue":list_venue})
 
-def vendor(request):
-    return render(request,'events/vendor.html', {"name":"name"})
-
 def contactus(request):
     return render(request,'events/contactus.html')
 

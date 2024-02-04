@@ -1,0 +1,20 @@
+{%extends 'base.html'%}
+{%load static%}
+
+{%block content%}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2>Forget Password</h2>
+            <form method="POST">
+                {%csrf_token%}
+                <div class="form-group mb-3">
+                    <label for="otp">OTP</label>
+                    <input type="otp" name="otp" id="otp" class="form-control" required>
+                    <input type="submit" class="btn btn-primary mt-3" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{%endblock%}

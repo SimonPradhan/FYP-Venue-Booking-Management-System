@@ -34,6 +34,10 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'venue',
     'user',
+    'vendor',
+    'payments',
+    'khalti',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -138,5 +142,25 @@ STATICFILES_DIRS = (
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+
+#Khalti payment
+KHALTI_SECRET_KEY = "test_secret_key_054bf433e1b343409cb7e79a087923ef"
+KHALTI_VERIFY_URL = "https://khalti.com/api/v2/payment/verify/"
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
+
+EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'shreejan.shrestha03@gmail.com'
+EMAIL_HOST_PASSWORD = 'ylir gdhf vypj vabo'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
