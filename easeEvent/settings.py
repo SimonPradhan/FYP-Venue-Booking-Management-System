@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'vendor',
     'payments',
     'khalti',
+    'chats',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -158,8 +159,8 @@ REST_FRAMEWORK = {
 EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'shreejan.shrestha03@gmail.com'
-EMAIL_HOST_PASSWORD = 'ylir gdhf vypj vabo'
+EMAIL_HOST_USER = 'potter1harry30@gmail.com'
+EMAIL_HOST_PASSWORD = 'ssooevgeavwiopfz'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 

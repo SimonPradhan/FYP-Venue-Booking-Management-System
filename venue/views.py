@@ -26,3 +26,7 @@ def partData(request, id):
     }
     return render(request, "events/venue.html", context)
 #     return render(request,'events/message.html'
+
+def booking(request):
+    
+    return render(request,'events/booking.html')

@@ -25,7 +25,9 @@
             </div>
         </div>
     </div>
-
+    <div class="container d-flex justify-content-center font-montserrat">
+        <h1> Top Venues</h1>
+    </div>
     <div class="container sm-4">
         <div class="row">
             {% if search_data %}
@@ -49,7 +51,17 @@
                                     <li><strong>Description:</strong>
                                     {{ venue.description }}
                                     </li>
-                                    <a href="{% url 'venue:payment' %}" class="btn btn-primary">Book Now</a>
+                                    <br>
+                                    <a href="{% url 'venue:payment' %}" class="btn btn-primary ">
+                                        <div class="row align-items-center">
+                                            <div class="col-2">
+                                                <i class="bi bi-journal-bookmark"></i>
+                                            </div>
+                                            <div class="col-2">
+                                                Book Now
+                                            </div>
+                                        </div>
+                                    </a>
                                     <!-- <button class="btn btn-primary" onclick="window.location.href='{% url 'venue:payment'%}'">Book Now</button> -->
                                 </div>
                             </ul>

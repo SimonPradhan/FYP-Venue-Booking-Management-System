@@ -14,6 +14,7 @@ def khalti(request):
         "token":token,
         "amount":amount,
     }
+    print(payload)
     headers = {
         "Authorization": "Key {}".format(settings.KHALTI_SECRET_KEY)
     }

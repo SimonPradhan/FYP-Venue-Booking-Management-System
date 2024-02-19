@@ -13,3 +13,27 @@
 body{
     background-color: #D7D7D7;
 }
+
+.backgroundLogin{
+    background-color: red;
+    background-image: url('/static/images/bgLogin.png');
+}
+
+.booking-form {
+    position: fixed;
+    top: 0;
+    right: -50%; /* Initially hide it off the screen */
+    height: 100%;
+    width: 50%;
+    background-color: #fff;
+    transition: right 0.3s ease-in-out;
+    z-index: 9999;
+    overflow-y: auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .booking-form.open {
+    right: 0; /* Slide in when open */
+  }
+  

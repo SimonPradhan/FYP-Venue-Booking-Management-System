@@ -1,47 +1,80 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 
 <a href="{% url 'venue:explore' %}" class="btn btn-primary mt-3 ml-3 mb-3">
-    <i class="bi bi-arrow-left"></i> Back to Explore
+  <i class="bi bi-arrow-left"></i> Back to Explore
 </a>
 <div class="container">
-    <div class="row">
-        <div class="d-flex justify-content-between">
-            <!-- Image on the left side -->
-            <div>
-                <img src="/media/{{ venue.image }}" alt="{{ venue.name }} Image" class="img-fluid" style="max-width: 400px;">
+  <div class="row">
+    <div class="d-flex justify-content-between">
+      <!-- Image on the left side -->
+      <div>
+        <img src="/media/{{ venue.image }}" alt="{{ venue.name }} Image" class="img-fluid" style="max-width: 400px" />
+      </div>
+      <div class="cols p-3">
+        <div class="ml-4">
+          <h2>{{ venue.name }}</h2>
+          <ul class="list-unstyled">
+            <li><strong>Address:</strong> {{ venue.address }}</li>
+            <li><strong>Price:</strong> {{ venue.price }} (per plate)</li>
+            <li><strong>Capacity:</strong> {{ venue.capacity }} people</li>
+            <li><strong>Phone:</strong> {{ venue.phone }}</li>
+            <li><strong>Description:</strong> {{ venue.description }}</li>
+          </ul>
+          <!-- Add more details as needed -->
+
+          <!-- Back button to explore page with icon -->
+        </div>
+        <div class="buttons p-4">
+          <!-- chat now button -->
+          <a href="{% url 'chats:chat' %}" class="btn btn-primary">
+            <div class="row align-items-center">
+              <div class="col-2">
+                <i class="bi bi-chat-dots"></i>
+              </div>
+              <div class="col-2">Chat Now</div>
             </div>
-
-            <!-- Details on the right side -->
-            <div class="ml-4">
-                <h2>{{ venue.name }}</h2>
-                <ul class="list-unstyled">
-                    <li><strong>Address:</strong> {{ venue.address }}</li>
-                    <li><strong>Price:</strong> {{ venue.price }} (per plate)</li>
-                    <li><strong>Capacity:</strong> {{ venue.capacity }} people</li>
-                    <li><strong>Phone:</strong> {{ venue.phone }}</li>
-                    <li><strong>Description:</strong> {{ venue.description }}</li>
-                </ul>
-                <!-- Add more details as needed -->
-
-                <!-- Back button to explore page with icon -->
+          </a>
+          <!-- book now button  -->
+          <button class="btn btn-primary book-now-btn">
+            <div class="row align-items-center">
+              <div class="col-2">
+                <i class="bi bi-journal-bookmark"></i>
+              </div>
+              <div class="col-2">Book Now</div>
             </div>
-        </div>
-    </div>
-    <div class="row mt-4">
-        <!-- Calendar section -->
-        <div class="col-md-6">
-            <h3>Calendar</h3>
-            <div id="Calendar" style="height: 400px;"></div>
-        </div>
+          </button>
 
-        <!-- Map section -->
-        <div class="col-md-6">
-            <h3>Map</h3>
-            <div id="map" style="height: 400px;"></div>
+          <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+            aria-controls="offcanvasRight">Toggle right offcanvas</button>
+
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              ...
+            </div>
+          </div>
         </div>
+      </div>
+      <!-- Details on the right side -->
     </div>
+  </div>
+  <div class="row mt-4">
+    <!-- Calendar section -->
+    <div class="col-md-6">
+      <h3>Calendar</h3>
+      <div id="Calendar" style="height: 400px"></div>
+    </div>
+
+    <!-- Map section -->
+    <div class="col-md-6">
+      <h3>Map</h3>
+      <div id="map" style="height: 400px"></div>
+    </div>
+  </div>
 </div>
+
+
 {% endblock %}

@@ -1,0 +1,25 @@
+{%extends 'vendor.html'%}
+{%load static%}
+{%block content%}
+<div class="main">
+
+    <form>
+      <label for="venueName">Venue Name:</label>
+      <input type="text" id="venueName" name="venueName" required>
+    
+      <label for="venueAddress">Venue Address:</label>
+      <input type="text" id="venueAddress" name="venueAddress" required>
+    
+      <label for="venuePhoneNumber">Venue Phone Number:</label>
+      <input type="tel" id="venuePhoneNumber" name="venuePhoneNumber" required>
+    
+      <label for="venueAvailability">Venue Availability:</label>
+      <input type="text" id="venueAvailability" name="venueAvailability" required>
+    
+      <label for="venueDescription">Venue Description:</label>
+      <textarea id="venueDescription" name="venueDescription" required></textarea>
+    
+      <button type="submit">Add Details</button>
+    </form>
+</div>
+{%endblock%}

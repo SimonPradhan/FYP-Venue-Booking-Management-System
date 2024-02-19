@@ -14,3 +14,16 @@ class Venue(models.Model):
         return self.name
     class Meta:
         db_table = "venue"
+
+class Booking(models.Model):
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    address = models.CharField(max_length=100)
+    phone = models.CharField(max_length=100)
+    email = models.CharField(max_length=100)
+    date = models.DateField()
+    time = models.TimeField()
+    def __str__(self):
+        return self.name
+    class Meta:
+        db_table = "booking"
