@@ -1,5 +1,5 @@
 from django.db import models
-
+from user.models import UserCustomer
 # Create your models here.
 
 class Venue(models.Model):
@@ -16,6 +16,7 @@ class Venue(models.Model):
         db_table = "venue"
 
 class Booking(models.Model):
+    username = models.ForeignKey(UserCustomer, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     address = models.CharField(max_length=100)

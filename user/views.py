@@ -94,7 +94,7 @@ def login_vendor(request):
             return redirect('vendor:vendor')
         else:
             messages.success(request,('Error logging in - please try again...'))
-    return render(request, 'authenticate/login.html')
+    return render(request, 'authenticate/login.html' )
 
 
 def signup_vendor(request):
@@ -206,9 +206,11 @@ def reset_password(request):
             return redirect('user:reset_password')
     return render(request, 'authenticate/resetPassword.html')
 
+
 @login_required
 def logout_vendor(request):
     logout(request)
+    request.session.flush()
     return redirect("venue:home")
     
 @login_required

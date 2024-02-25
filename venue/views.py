@@ -1,5 +1,6 @@
 from django.shortcuts import render 
-from .models import Venue
+from django.views.decorators.csrf import csrf_exempt
+from .models import Venue, Booking
 
 def home(request):
     list_venue = Venue.objects.all()
@@ -27,6 +28,23 @@ def partData(request, id):
     return render(request, "events/venue.html", context)
 #     return render(request,'events/message.html'
 
+@csrf_exempt
 def booking(request):
-    
-    return render(request,'events/booking.html')
+    if request== 'POST':
+        eventName = request.POST.get('eventName')
+        eventType = request.POST.get('eventType')
+        date = request.POST.get('date')
+        time = request.POST.get('time')
+        guests = request.POST.get('guests')
+        message = request.POST.get('message')
+        
+        booking = Booking.objects.create(
+            eventName=eventName,
+            eventType=eventType,
+            date=date,
+            time=time,
+            guests=guests,
+            message=message
+        )
+        booking.save()
+    return render(request,'events/khaltipayment.html')
