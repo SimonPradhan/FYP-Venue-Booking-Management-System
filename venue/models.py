@@ -18,12 +18,12 @@ class Venue(models.Model):
 class Booking(models.Model):
     username = models.ForeignKey(UserCustomer, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    address = models.CharField(max_length=100)
-    phone = models.CharField(max_length=100)
-    email = models.CharField(max_length=100)
+    eventName = models.CharField(max_length=100)
+    eventType = models.CharField(max_length=100)
+    guests = models.IntegerField()
     date = models.DateField()
     time = models.TimeField()
+    message = models.TextField(max_length=500)
     def __str__(self):
         return self.name
     class Meta:

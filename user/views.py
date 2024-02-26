@@ -41,6 +41,7 @@ def login_user(request):
             user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            request.session['email'] = UserCustomer.objects.get(username=username).email
             messages.success(request,('You have been logged in!'))
             return redirect('venue:home')
         else:

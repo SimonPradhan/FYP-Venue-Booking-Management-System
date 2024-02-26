@@ -14,6 +14,12 @@ def contactus(request):
     return render(request,'events/contactus.html')
 
 def payment(request):
+    url = "https://khalti.com/api/v2/merchant-transaction/<idx>/"
+    headers = {
+        "Authorization": "Key test_secret_key_f59e8b7d18b4499ca40f68195a846e9b"
+        }
+
+    response = request.get(url, headers = headers)
     return render(request,'events/khaltipayment.html')
 
 def explore(request):
