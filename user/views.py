@@ -80,7 +80,7 @@ def signup_user(request):
             cust.save()
             messages.success(request,('Account created successfully!'))
             return redirect('user:login')
-    return render(request, 'authenticate/signup.html')
+    return render(request, 'authenticate/signup.html', {'is_customer_signup': True})
 
 @csrf_exempt
 def login_vendor(request):
@@ -130,7 +130,7 @@ def signup_vendor(request):
             messages.success(request,('Account created successfully!'))
             return redirect('vendor:vendor')
         
-    return render(request, 'authenticate/signup.html')
+    return render(request, 'authenticate/signup.html', {'is_customer_signup': False})
 
 @csrf_exempt
 def forgetpassword(request):

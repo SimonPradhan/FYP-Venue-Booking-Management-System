@@ -6,3 +6,7 @@ def vendor(request):
 
 def details(request):
     return render(request,'vendor/details.html', {"name":"name"})
+
+def showBookings(request):
+    
+    return render(request,'vendor/viewBooking.html', {"name":"name"})
