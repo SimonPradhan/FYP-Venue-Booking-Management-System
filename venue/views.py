@@ -29,16 +29,22 @@ def explore(request):
 def partData(request, id):
     venue = Venue.objects.get(id=id)
     context ={
-        "venue":venue
+        "venue":venue,
     }
     return render(request, "events/venue.html", context)
 #     return render(request,'events/message.html'
 
 @csrf_exempt
-def booking(request, venue, username):
-    user = UserCustomer.objects.get(id=username)
-    venue = Venue.objects.get(id=venue)
-    if request== 'POST':
+def booking(request, id):
+
+    username = request.user
+
+    user = UserCustomer.objects.get(username=username)
+
+    venue = Venue.objects.get(id=id)
+    print(venue, user)
+    if request.method == 'POST':
+        #username = request.POST.get('user')
         eventName = request.POST.get('eventName')
         eventType = request.POST.get('eventType')
         date = request.POST.get('date')
@@ -46,7 +52,10 @@ def booking(request, venue, username):
         guests = request.POST.get('guests')
         message = request.POST.get('message')
         
+        print(user, venue, eventName, eventType, date, time, guests, message)
         booking = Booking.objects.create(
+            username= user,
+            venue=venue,
             eventName=eventName,
             eventType=eventType,
             date=date,
@@ -55,4 +64,6 @@ def booking(request, venue, username):
             message=message
         )
         booking.save()
-    return render(request,'events/khaltipayment.html', {'venue':venue, 'user':user, 'booking':booking})
+        return render(request,'events/khaltipayment.html', {'venue':venue, 'user':user, 'booking':booking})
+    return render(request,'events/venue.html',{'venue':venue})
+

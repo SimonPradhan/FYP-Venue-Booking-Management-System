@@ -1,8 +1,9 @@
 from django.db import models
-from user.models import UserCustomer
+from user.models import UserCustomer, UserVendor
 # Create your models here.
 
 class Venue(models.Model):
+    username = models.ForeignKey(UserVendor, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
     capacity = models.IntegerField()

@@ -9,5 +9,5 @@ urlpatterns = [
     path('explore/',explore, name='explore'),
     path('venue/<int:id>',partData, name='partData'),
     # path('venue/',show_venue, name='venues'),
-    path('booking/',booking, name='booking'),
+    path('booking/<int:id>',booking, name='booking'),
     ]
