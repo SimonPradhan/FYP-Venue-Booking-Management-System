@@ -10,16 +10,12 @@
         <div class="d-flex justify-content-between">
             <!-- Image on the left side -->
             <div>
-                <img
-                    src="/media/{{ venue.image }}"
-                    alt="{{ venue.name }} Image"
-                    class="img-fluid"
-                    style="max-width: 400px"
-                />
+                <img src="/media/{{ venue.image }}" alt="{{ venue.name }} Image" class="img-fluid"
+                    style="max-width: 400px" />
             </div>
             <div class="cols p-3">
                 <div class="ml-4">
-                    <h2>{{ venue.name }}</h2>
+                    <h2>{{ venue.venuename }}</h2>
                     <ul class="list-unstyled">
                         <li><strong>Address:</strong> {{ venue.address }}</li>
                         <li><strong>Price:</strong> {{ venue.price }} (per plate)</li>
@@ -50,7 +46,7 @@
                             <div class="col-2">Book Now</div>
                         </div>
                     </button>
-                    
+
                 </div>
             </div>
             <!-- Details on the right side -->
@@ -70,7 +66,7 @@
         </div>
     </div>
 
-  </div>
+</div>
 
 
 
@@ -80,7 +76,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="bookingModalLabel">Booking Form</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x"></i></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                        class="bi bi-x"></i></button>
             </div>
             <div class="modal-body">
                 <form method="POST">
@@ -108,7 +105,22 @@
                     </div>
                     <div class="form-group">
                         <label for="time">Time:</label>
-                        <input type="time" class="form-control" id="time" name="time" required>
+                        <select name="time" id="time">
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                            <option value="12:00">12:00</option>
+                            <option value="13:00">13:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                            <option value="17:00">17:00</option>
+                            <option value="18:00">18:00</option>
+                            <option value="19:00">19:00</option>
+                            <option value="20:00">20:00</option>
+                            <option value="21:00">21:00</option>
+                            <option value="22:00">22:00</option>
+                        </select>
+                        <!-- <input type="time" class="form-control" id="time" name="time" min="10:00" max="22:00" required> -->
                     </div>
 
                     <div class="form-group">
@@ -122,21 +134,44 @@
                     </div>
 
                     <!-- <a href="{%url 'venue:booking' venue.id%}" class="btn btn-primary bookNowButton">Book</a> -->
-                    <input type="submit" value="Book" class="'btn btn-primary bookNowButton">
+                    <input type="submit" value="Book" class="btn btn-primary bookNowButton" id="bookNowButton">
 
                 </form>
             </div>
         </div>
     </div>
 </div>
-<script>
+
+<script defer>
     function redirectToPayment() {
         window.location.href = "{% url 'venue:payment' %}";
     }
 
-// Assuming you have a button with id "bookNowButton"
-document.getElementById("bookNowButton").addEventListener("click", redirectToPayment);
+    function targetVenuebooking() {
+        window.location.href = "{% url 'venue:booking' id=venue.id %}";
+    }
 
+    // Assuming you have a button with id "bookNowButton"
+    
+    
+    document.addEventListener('DOMContentLoaded', function(){
+        var valuesToDisable = ['11:00', '13:00'];
+
+        // Get the select element
+        var selectElement = document.getElementById('time');
+
+        // Disable options based on the list
+        for (var i = 0; i < selectElement.options.length; i++) {
+            var option = selectElement.options[i];
+            if (valuesToDisable.includes(option.value)) {
+                option.disabled = true;
+            }
+        }
+    });
+    // List of values to disable
+    
+    document.getElementById("bookNowButton").addEventListener("click", targetVenuebooking);
+    
 </script>
 
 

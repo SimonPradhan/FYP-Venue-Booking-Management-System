@@ -1,5 +1,6 @@
 from django.shortcuts import render 
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 from .models import Venue, Booking, UserCustomer
 
 def home(request):
@@ -36,15 +37,22 @@ def partData(request, id):
 
 @csrf_exempt
 def booking(request, id):
+    user_id = request.session.get('user_id')  # Retrieve user_id from session
+    if user_id is None:
+        # Handle case where user_id is not found in the session
+        return HttpResponse("User not authenticated or session expired.")
 
-    username = request.user
+    try:
+        user = UserCustomer.objects.get(id=user_id)
+        venue = Venue.objects.get(id=id)
+    except UserCustomer.DoesNotExist:
+        # Handle case where user is not found in the database
+        return HttpResponse("User does not exist.")
+    except Venue.DoesNotExist:
+        # Handle case where venue is not found in the database
+        return HttpResponse("Venue does not exist.")
 
-    user = UserCustomer.objects.get(username=username)
-
-    venue = Venue.objects.get(id=id)
-    print(venue, user)
     if request.method == 'POST':
-        #username = request.POST.get('user')
         eventName = request.POST.get('eventName')
         eventType = request.POST.get('eventType')
         date = request.POST.get('date')
@@ -52,9 +60,8 @@ def booking(request, id):
         guests = request.POST.get('guests')
         message = request.POST.get('message')
         
-        print(user, venue, eventName, eventType, date, time, guests, message)
         booking = Booking.objects.create(
-            username= user,
+            username=user,
             venue=venue,
             eventName=eventName,
             eventType=eventType,
@@ -64,6 +71,6 @@ def booking(request, id):
             message=message
         )
         booking.save()
-        return render(request,'events/khaltipayment.html', {'venue':venue, 'user':user, 'booking':booking})
-    return render(request,'events/venue.html',{'venue':venue})
+        return render(request, 'events/khaltipayment.html', {'venue': venue, 'user': user, 'booking': booking})
 
+    return render(request, 'events/venue.html', {'venue': venue})

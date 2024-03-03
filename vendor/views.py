@@ -11,17 +11,18 @@ def vendor(request):
 def details(request):
     return render(request,'vendor/details.html', {"name":"name"})
 
-def showBookings(request):
-    vendor = UserVendor.objects.get(username=request.user)
+def addVenue(request):
+
+    return render(request,'vendor/addVenue.html', {"name":"name"})
+
+def showBookings(request, id):
     try:
         # Retrieve the Venue associated with the UserVendor
-        venue = Venue.objects.get(username=vendor)
+        venue = Venue.objects.get(vendor_id = id)
     except Venue.DoesNotExist:
         # Handle the case where no venue is associated with the vendor
         venue = None
-    print(vendor, venue)
-
-    print(vendor, venue)
+    print(venue)
     context = {
         'bookings': Booking.objects.filter(venue=venue),
         'vendor': vendor,

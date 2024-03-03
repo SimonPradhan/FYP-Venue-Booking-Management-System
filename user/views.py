@@ -34,19 +34,26 @@ from django.conf import settings
 
 @csrf_exempt
 def login_user(request):
+  # Initialize username with a default value
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password') 
         if UserCustomer.objects.filter(username=username):
             user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            request.session['email'] = UserCustomer.objects.get(username=username).email
-            messages.success(request,('You have been logged in!'))
-            return redirect('venue:home')
+            if user is not None:
+                login(request, user)
+                request.session['email'] = UserCustomer.objects.get(username=username).email
+                messages.success(request, 'You have been logged in!')
+                return redirect('venue:home')
+            else:
+                messages.error(request, 'Error logging in - please try again...')
         else:
-            messages.success(request,('Error logging in - please try again...'))
+            messages.error(request, 'Error logging in - User does not exist.')
+        
+    # Assign username to the context outside of the conditional block
+    
     return render(request, 'authenticate/login.html')
+
 
 
 def signup_user(request):
@@ -217,4 +224,5 @@ def logout_vendor(request):
 @login_required
 def logoutUser(request):
     logout(request)
+    request.session.flush()
     return redirect("venue:home")
