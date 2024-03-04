@@ -80,7 +80,7 @@
                         class="bi bi-x"></i></button>
             </div>
             <div class="modal-body">
-                <form method="POST">
+                <form method="POST" action="{% url 'venue:booking' %}">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="eventName">Event Name:</label>
@@ -106,6 +106,7 @@
                     <div class="form-group">
                         <label for="time">Time:</label>
                         <select name="time" id="time">
+                            <option value="10:00">--</option>
                             <option value="10:00">10:00</option>
                             <option value="11:00">11:00</option>
                             <option value="12:00">12:00</option>
@@ -133,44 +134,62 @@
                         <textarea class="form-control" id="message" name="message" rows="3"></textarea>
                     </div>
 
-                    <!-- <a href="{%url 'venue:booking' venue.id%}" class="btn btn-primary bookNowButton">Book</a> -->
-                    <input type="submit" value="Book" class="btn btn-primary bookNowButton" id="bookNowButton">
+                    <button type="submit" value="Book"   class="btn btn-primary bookNowButton" id="bookNowButton">Book Now</button>
 
                 </form>
+
+               
             </div>
         </div>
     </div>
 </div>
 
-<script defer>
-    function redirectToPayment() {
-        window.location.href = "{% url 'venue:payment' %}";
+<script defer >
+   
+  
+    document.getElementById("date").addEventListener("change", function() {
+   
+    const chosenDate = new Date(this.value);
+ 
+    // console.log(chosenDate);
+    if (chosenDate >= new Date()) {
+        document.getElementById("bookNowButton").disabled = false;
+    } else {
+        document.getElementById("bookNowButton").disabled = true;
     }
-
-    function targetVenuebooking() {
-        window.location.href = "{% url 'venue:booking' id=venue.id %}";
-    }
-
-    // Assuming you have a button with id "bookNowButton"
+    const bookingData = {{ booking_data|safe }};
+   
+    var bookingsForSelectedDate,timesForSelectedDate = [];
+    console.log(bookingsForSelectedDate)
+    // Get the select element
+    var selectElement = document.getElementById('time');
     
+    // Get the selected date
+    var selectedDate = document.getElementById('date').value;
     
-    document.addEventListener('DOMContentLoaded', function(){
-        var valuesToDisable = ['11:00', '13:00'];
+    // Filter booking data for the selected date
+    bookingsForSelectedDate = bookingData.filter(booking => booking.date === selectedDate);
+  
+    // Extract time values for the selected date
+    timesForSelectedDate = bookingsForSelectedDate.map(booking => booking.time);
 
-        // Get the select element
-        var selectElement = document.getElementById('time');
-
-        // Disable options based on the list
-        for (var i = 0; i < selectElement.options.length; i++) {
-            var option = selectElement.options[i];
-            if (valuesToDisable.includes(option.value)) {
-                option.disabled = true;
-            }
+    // Disable options based on the list
+    for (var i = 0; i < selectElement.options.length; i++) {
+        var option = selectElement.options[i];
+        if (timesForSelectedDate.includes(option.value)) {
+            option.disabled = true;
         }
-    });
+        else{
+            option.disabled = false;
+        
+        }
+    }
+});
+
     // List of values to disable
     
-    document.getElementById("bookNowButton").addEventListener("click", targetVenuebooking);
+    // document.getElementById("bookNowButton").addEventListener("click", targetVenuebooking());
+    
     
 </script>
 

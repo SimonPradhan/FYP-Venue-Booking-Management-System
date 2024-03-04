@@ -4,7 +4,7 @@ from user.models import UserVendor
 
 # Create your views here.
 def vendor(request):
-    vendor = UserVendor.objects.get(username=request.user)
+    vendor = UserVendor.objects.get(username=request.session.get('vendor_id'))
 
     return render(request,'vendor/dashboard.html', {"vendor":vendor})
 
@@ -15,7 +15,9 @@ def addVenue(request):
 
     return render(request,'vendor/addVenue.html', {"name":"name"})
 
-def showBookings(request, id):
+def showBookings(request):
+    id = request.session.get('vendor_id')
+
     try:
         # Retrieve the Venue associated with the UserVendor
         venue = Venue.objects.get(vendor_id = id)
@@ -24,7 +26,7 @@ def showBookings(request, id):
         venue = None
     print(venue)
     context = {
-        'bookings': Booking.objects.filter(venue=venue),
+        'bookings': Booking.objects.filter(venue=venue).values(),
         'vendor': vendor,
     }
     return render(request,'vendor/viewBooking.html', context)

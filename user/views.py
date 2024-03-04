@@ -43,6 +43,8 @@ def login_user(request):
             if user is not None:
                 login(request, user)
                 request.session['email'] = UserCustomer.objects.get(username=username).email
+                request.session['user_id'] = UserCustomer.objects.get(username=username).id
+                print(request.session.get('user_id'))
                 messages.success(request, 'You have been logged in!')
                 return redirect('venue:home')
             else:
@@ -98,6 +100,8 @@ def login_vendor(request):
             user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            request.session['email'] = UserVendor.objects.get(username=username).email
+            request.session['vendor_id'] = UserVendor.objects.get(username=username).id
             messages.success(request,('You have been logged in!'))
             return redirect('vendor:vendor')
         else:
