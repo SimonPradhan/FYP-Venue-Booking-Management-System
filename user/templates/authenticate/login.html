@@ -13,10 +13,9 @@
 {% endif %}
 
 {% block content %}
-<!-- bootstrap new-->
+<!-- Bootstrap new -->
 
-<!-- bootstrap old-->
-<div class="container mt-5 mb-5 sm-5 rounded" >
+<div class="container mt-5 mb-5 sm-5 rounded">
   <div class="row justify-content-center">
     <div class="card mb-3" style="max-width: 1000px;">
       <div class="row g-0">
@@ -27,12 +26,12 @@
           <div class="card-header">
             <h3 class="text-center">Login</h3>
             <div class="d-flex justify-content-between" style="max-width:540px;">
-              <a href="{% url 'user:login' %}" class="btn btn-primary btn-sm " style="width:45%;">Customer Login</a>
-              <a href="{% url 'user:loginVendor' %}" class="btn btn-primary btn-sm" style="width:45%;">Vendor Login</a>
+              <a href="#" class="btn btn-primary btn-sm customer-login active" style="width:45%;">Customer Login</a>
+              <a href="#" class="btn btn-primary btn-sm vendor-login" style="width:45%;">Vendor Login</a>
             </div>
           </div>
           <div class="card-body">
-            <form method="POST" action="">
+            <form method="POST" action="" id="login-form">
               {% csrf_token %}
               <div class="form-group">
                 <label for="username">Username:</label>
@@ -56,16 +55,28 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
 <script>
-  user = 
-  const btn = document.getElementById('button');
-  btn.addEventListener('click', () => {
-    console.log(user.id)
+  document.addEventListener('DOMContentLoaded', function() {
+    const customerLoginTab = document.querySelector('.customer-login');
+    const vendorLoginTab = document.querySelector('.vendor-login');
+    const loginForm = document.getElementById('login-form');
+
+    customerLoginTab.addEventListener('click', function(event) {
+      event.preventDefault();
+      customerLoginTab.classList.add('active');
+      vendorLoginTab.classList.remove('active');
+      loginForm.action = "{% url 'user:login' %}";
+    });
+
+    vendorLoginTab.addEventListener('click', function(event) {
+      event.preventDefault();
+      vendorLoginTab.classList.add('active');
+      customerLoginTab.classList.remove('active');
+      loginForm.action = "{% url 'user:loginVendor' %}";
+    });
   });
-  
 </script>
 {% endblock %}

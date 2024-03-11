@@ -1,15 +1,13 @@
-{% extends 'vendor.html' %}
-{% load static %}
-
+{% extends 'adminPanel/index.html' %}
+{%load static%}
 {% block content %}
 <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
-
 <div class="container-fluid">
     <div class="row">
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Bookings</h1>
+        <h1 class="h2">Vendor Details</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -21,38 +19,51 @@
           </button>
         </div>
       </div>
-
-      <h2>What we have here?</h2>
       <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>
-            {% if bookings %}
+            {% if vendors %}
             <tr>
               <th>S.N</th>
-              <th>Customer</th>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Event Type</th>
+              <th>Vendor</th>
+              <th>Email</th>
+              <th>Phone No.</th>
+              <th>Address</th>
+              <th colspan="2" style="text-align: center;">Edit</th>
             </tr>
           </thead>
           <tbody>
-            {% for booking in bookings %}
+            {% for vendor in vendors %}
             <tr>
               <td>{{forloop.counter}}</td>
-              <td>{{ booking.username_id}}</td>
-              <td>{{ booking.date }}</td>
-              <td>{{ booking.time }}</td>
-              <td>{{ booking.eventType }}</td>
+              <td>{{ vendor.name}}</td>
+              <td>{{ vendor.email }}</td>
+              <td>{{ vendor.phone }}</td>
+              <td>{{ vendor.address }}</td>
+              <td style="width: 30px;">
+                <button type="button" class="btn btn-primary"><i class="bi bi-pencil-square"></i></button>
+              </td>
+              <td style="width: 30px;">
+                  <button type="button" class="btn btn-danger" onclick="deleteVendor('{{vendor.id}}')"><i class="bi bi-trash-fill"></i></button>
+              </td>
             </tr>
             {% endfor %}
-          </tbody>
+          </tbody>  
         </table>
         {% else %}
-        <h4>Oh... No bookings</h4>
+        <h4>No Data...</h4>
         {% endif %}
       </div>
     </main>
     </div>
 </div>
-
+<script>
+  function deleteVendor(id){
+    alert(id);
+    var r = confirm("Are you sure you want to delete?");
+    if (r == true) {
+      window.location.href= "/delete_vendor/"+id+"/";
+    }
+  }
+</script>
 {% endblock %}

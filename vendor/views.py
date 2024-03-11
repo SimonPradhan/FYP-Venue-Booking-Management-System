@@ -20,10 +20,10 @@ def addVenue(request):
 def showBookings(request):
     vendor_id = request.session.get('vendor_id')
     user = UserVendor.objects.get(id=vendor_id)
-    # cust = UserCustomer.6
+    # cust = UserCustomer
     # Retrieve all venues associated with the UserVendor
     venues = Venue.objects.filter(vendor_id=vendor_id)
-    
+    print(venues, user, vendor_id)
     context = {
         'bookings': Booking.objects.filter(venue__in=venues).values(),
         'vendor': user,

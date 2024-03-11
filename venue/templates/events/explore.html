@@ -19,10 +19,13 @@
     <div class="row">
         {% for venue in list_venue %}
             <div class="col-md-4 mb-3">
-                <div class="card" style="cursor: pointer;" data-toggle="modal" data-target="#venueModal{{ venue.id }}">
-                    <img src="/media/{{ venue.image }}" class="card-img-top rounded-top" alt="{{ venue.name }} Image" width="400" height="400">
+                <div class="card" style="cursor: pointer;" >
+                    <img src="/media/{{ venue.image }}" class="card-img-top" alt="{{ venue.name }} Image" style="border-radius: 0px 30px 0px 30px; background-color: #f8f9fa;" data-toggle="modal" data-target="#venueModal{{ venue.id }}" width="400" height="400">
                     <div class="card-body">
-                        <h5 class="card-title">{{ venue.venuename }}</h5>
+                        <div class="row ml-1 align-items-center">
+                            <h5 class="card-title">{{ venue.venuename }} </h5>
+                        </div>
+                        <p class="card-text ml-1">{{ venue.address }}</p>
                     </div>
                 </div>
 
@@ -55,4 +58,11 @@
         {% endfor %}
     </div>
 </div>
+
+<script>
+    function changeIcon(){
+        var icon = document.getElementById('heart');
+
+    }
+</script>
 {% endblock %}

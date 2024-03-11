@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'payments',
     'khalti',
     'chats',
+    'adminPanel',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',

@@ -36,9 +36,13 @@ body{
     right: 0; /* Slide in when open */
   }
   
-.footer{
+  .footer {
+
     padding: 10px;
     bottom: 0;
+
     width: 100%;
     background-color: #f8f9fa;
 }
+
+/* Login */
