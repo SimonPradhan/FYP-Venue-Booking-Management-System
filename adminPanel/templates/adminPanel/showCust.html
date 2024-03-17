@@ -17,13 +17,13 @@
             <span data-feather="calendar"></span>
             This week
           </button>
-          <button type="button" class="btn btn-primary" onclick="addVendor()">Add Vendor</button>
+          <button type="button" class="btn btn-primary" onclick="addCust()">Add Customers</button>
         </div>
       </div>
       <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>
-            {% if vendors %}
+            {% if customers %}
             <tr>
               <th>S.N</th>
               <th>Vendor</th>
@@ -34,18 +34,18 @@
             </tr>
           </thead>
           <tbody>
-            {% for vendor in vendors %}
+            {% for cust in customers %}
             <tr>
               <td>{{forloop.counter}}</td>
-              <td>{{ vendor.name}}</td>
-              <td>{{ vendor.email }}</td>
-              <td>{{ vendor.phone }}</td>
-              <td>{{ vendor.address }}</td>
+              <td>{{ cust.name}}</td>
+              <td>{{ cust.email }}</td>
+              <td>{{ cust.phone }}</td>
+              <td>{{ cust.address }}</td>
               <td style="width: 30px;">
-                <button type="button" class="btn btn-primary" onclick="updateVendor('{{vendor.id}}')"><i class="bi bi-pencil-square"></i></button>
+                <button type="button" class="btn btn-primary" onclick="updateCust('{{cust.id}}')"><i class="bi bi-pencil-square"></i></button>
               </td>
               <td style="width: 30px;">
-                  <button type="button" class="btn btn-danger" onclick="deleteVendor('{{vendor.id}}')"><i class="bi bi-trash-fill"></i></button>
+                  <button type="button" class="btn btn-danger" onclick="deleteCust('{{cust.id}}')"><i class="bi bi-trash-fill"></i></button>
               </td>
             </tr>
             {% endfor %}
@@ -59,18 +59,18 @@
     </div>
 </div>
 <script>
-  function updateVendor(id){
-    window.location.href= "/update_vendor/"+id+"/";
+  function updateCust(id){
+    window.location.href= "/update_cust/"+id+"/";
   }
-  function deleteVendor(id){
+  function deleteCust(id){
     var r = confirm("Are you sure you want to delete?");
     if (r == true) {
-      window.location.href= "/delete_vendor/"+id+"/";
+      window.location.href= "/delete_cust/"+id+"/";
     }
   }
 
-  function addVendor(){
-      window.location.href= "/add_vendor/";
+  function addCust(){
+      window.location.href= "/add_cust/";
   }
 
 </script>

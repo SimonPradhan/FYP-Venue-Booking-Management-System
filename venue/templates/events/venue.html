@@ -154,7 +154,7 @@
     // console.log(chosenDate);
     if (chosenDate >= new Date()) {
         document.getElementById("bookNowButton").disabled = false;
-    } else {
+    } else 
         document.getElementById("bookNowButton").disabled = true;
     }
     const bookingData = {{ booking_data|safe }};

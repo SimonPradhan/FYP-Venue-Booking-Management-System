@@ -1,0 +1,46 @@
+{% extends 'adminPanel/index.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+{% block content %}
+<div class="goBack">
+  <button class="btn btn-primary" onclick="redirectShowVendors()"><i class="bi bi-arrow-left"></i></button>
+</div>
+<h2>Update Vendor Details</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" class="form-control" name="name" value="{{vendor.name}}">
+        </div>
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" name="username" value="{{vendor.username}}">
+        </div>
+        <div class="form-group">
+            <label for="address">Address</label>
+            <input type="text" class="form-control" name="address" value="{{vendor.address}}">
+          </div>
+      
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" name="email" value="{{vendor.email}}">
+          </div>
+      
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" name="password">
+          </div>
+          
+          <div class="form-group">
+            <label for="phone">Mobile Number</label>
+            <input type="tel" class="form-control" pattern="[0-9]{10}" name="phone" value="{{vendor.phone}}">
+          </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Update</button>
+    </form>
+    <script>
+      function redirectShowVendors(){
+          window.location.href = "{% url 'adminPanel:show_vendors' %}";
+      }
+  </script>
+{% endblock %}

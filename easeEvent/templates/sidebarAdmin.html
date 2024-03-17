@@ -7,10 +7,13 @@
                 </div>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Dashboard</a>
+                        <a class="nav-link" href="{% url 'adminPanel:dashboard' %}">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'adminPanel:show_vendors' %}">Vendors Detail</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'adminPanel:show_cust' %}">Customers Detail</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Logout</a>

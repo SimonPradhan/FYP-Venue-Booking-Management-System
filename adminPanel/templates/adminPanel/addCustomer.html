@@ -3,9 +3,9 @@
 {% block content %}
 <link href="{% static 'css/admin.css' %}" rel="stylesheet">
 <div class="goBack">
-    <button class="btn btn-primary" onclick="redirectShowVendors()"><i class="bi bi-arrow-left"></i></button>
+    <button class="btn btn-primary" onclick="redirectShowCustomers()"><i class="bi bi-arrow-left"></i></button>
 </div>
-<h2>Add Vendor</h2>
+<h2>Add Customers</h2>
 <form method="POST" action="">
     {% csrf_token %}
     <div class="form-group">
@@ -42,8 +42,8 @@
     <button type="submit" class="btn btn-primary btn-block mt-3">Submit</button>
   </form>
 <script>
-    function redirectShowVendors(){
-        window.location.href = "{% url 'adminPanel:show_vendors' %}";
+    function redirectShowCustomers(){
+        window.location.href = "{% url 'adminPanel:show_cust' %}";
     }
 </script>
 {% endblock %}
