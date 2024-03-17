@@ -18,6 +18,7 @@ def adminDashboard(request):
     }
     return render(request, 'adminPanel/adminDasboard.html', context)
 
+#vendors
 def add_vendor(request):
     vendor = UserVendor.objects.all()
     if request.method == 'POST':
@@ -75,6 +76,7 @@ def update_vendor(request, id):
         vendor.save()
         return render(request, 'adminPanel/showVendor.html', {"vendor":vendor})
     return render(request, 'adminPanel/updateVendor.html', {"vendor":vendor})
+
 def show_vendors(request):
     vendor_detail = UserVendor.objects.all()
     context = {
@@ -82,6 +84,7 @@ def show_vendors(request):
     }
     return render(request, 'adminPanel/showVendor.html', context)
 
+#customers
 def show_cust(request):
     cust_detail = UserCustomer.objects.all()
     context = {
@@ -147,3 +150,10 @@ def delete_cust(request, id):
     cust.delete()
     return render(request, 'adminPanel/showCust.html', {"cust":cust})
 
+#bookings
+def show_books(request):
+    booking_detail = Booking.objects.order_by('date')
+    context = {
+        'bookings': booking_detail
+    }
+    return render(request, 'adminPanel/showBook.html', context)
