@@ -1,17 +1,25 @@
 from django.shortcuts import render 
 from django.views.decorators.csrf import csrf_exempt
+from django.db import transaction
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from .models import Venue, Booking, UserCustomer
 from django.core.serializers.json import DjangoJSONEncoder 
 import json
 
+from django.shortcuts import render
+from .models import Venue
+
 def home(request):
     list_venue = Venue.objects.all()
     search_data = request.GET.get('search')
-    if search_data != "" and search_data is not None:
+    
+    if search_data is not None and search_data.strip():  # Check for non-empty search string
         data = Venue.objects.filter(title__icontains=search_data)
-        return render(request, 'events/home.html', {'data': data})
-    return render(request,'events/home.html', {"name":"name", "list_venue":list_venue})
+        return render(request, 'events/home.html', {'data': data, 'list_venue': list_venue, 'search_data': search_data})
+    
+    return render(request, 'events/home.html', {'list_venue': list_venue})
+
 
 def contactus(request):
     return render(request,'events/contactus.html')
@@ -49,18 +57,13 @@ def partData(request, id):
 
 @csrf_exempt
 def booking(request):
-    user_id = request.session.get('user_id')  # Retrieve user_id from session
-    venue_id = request.session.get('venue_id')  # Retrieve venue_id from session
-    # try:
-    user = UserCustomer.objects.get(id=user_id)
-    venue = Venue.objects.get(id=venue_id)
-    print(venue)
-    # except UserCustomer.DoesNotExist:
-    #     # Handle case where user is not found in the database
-    #     return HttpResponse("User does not exist.")
-    # except Venue.DoesNotExist:
-    #     # Handle case where venue is not found in the database
-    #     return HttpResponse("Venue does not exist.")
+    # Retrieve user_id and venue_id from session
+    user_id = request.session.get('user_id')
+    venue_id = request.session.get('venue_id')
+
+    # Retrieve user and venue objects or return 404 if not found
+    user = get_object_or_404(UserCustomer, id=user_id)
+    venue = get_object_or_404(Venue, id=venue_id)
 
     if request.method == 'POST':
         eventName = request.POST.get('eventName')
@@ -69,18 +72,25 @@ def booking(request):
         time = request.POST.get('time')
         guests = request.POST.get('guests')
         message = request.POST.get('message')
+
+        # Validate input data (e.g., check if date is in the future)
+        # Perform any necessary validation checks here
         
-        booking = Booking.objects.create(
-            username=user,
-            venue=venue,
-            eventName=eventName,
-            eventType=eventType,
-            date=date,
-            time=time,
-            guests=guests,
-            message=message
-        )
-        booking.save()
+        # Create booking object and save it to the database
+        with transaction.atomic():
+            booking = Booking.objects.create(
+                username=user,
+                venue=venue,
+                eventName=eventName,
+                eventType=eventType,
+                date=date,
+                time=time,
+                guests=guests,
+                message=message
+            )
+
+        # Render the khaltipayment.html template with appropriate context
         return render(request, 'events/khaltipayment.html', {'venue': venue, 'user': user, 'booking': booking})
 
+    # Return HttpResponse or render a template for GET requests
     return render(request, 'events/venue.html', {'venue': venue})

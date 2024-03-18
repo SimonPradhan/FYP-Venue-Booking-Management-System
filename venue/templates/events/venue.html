@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
 <div class="container">
     <a href="{% url 'venue:explore' %}" class="btn btn-primary mt-3 ml-3 mb-3">
@@ -56,13 +57,13 @@
         <!-- Calendar section -->
         <div class="col-md-6">
             <h3>Calendar</h3>
-            <div id="Calendar" style="height: 400px"></div>
+            <div id="Calendar" style="height: 400px; border: 1px solid #ccc"></div>
         </div>
 
         <!-- Map section -->
-        <div class="col-md-6">
+        <div class="col-md-6 mb-3">
             <h3>Map</h3>
-            <div id="map" style="height: 400px"></div>
+            <div id="map" style="height: 400px; border: 2px solid #000000"></div>
         </div>
     </div>
 
@@ -144,6 +145,8 @@
     </div>
 </div>
 
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 <script defer >
    
   
@@ -154,7 +157,7 @@
     // console.log(chosenDate);
     if (chosenDate >= new Date()) {
         document.getElementById("bookNowButton").disabled = false;
-    } else 
+    } else {
         document.getElementById("bookNowButton").disabled = true;
     }
     const bookingData = {{ booking_data|safe }};
@@ -186,11 +189,39 @@
     }
 });
 
+// Define the coordinates of the desired location
+// Define the name of the place you want to search
+var placeName = "{{venue.address}}"; // Example place name
+
+// Make a request to the Nominatim API to search for the place name
+fetch('https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(placeName) + '&format=json')
+  .then(response => response.json())
+  .then(data => {
+    // Check if the response contains any results
+    if (data && data.length > 0) {
+      // Extract the latitude and longitude from the first result
+      var latitude = data[0].lat;
+      var longitude = data[0].lon;
+      
+      // Initialize the map with the view set to the desired location
+      var map = L.map('map').setView([latitude, longitude], 18); // Set initial coordinates and zoom level
+
+      // Add a tile layer (OpenStreetMap tile layer)
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+          maxZoom: 100
+      }).addTo(map);
+    } else {
+      console.log("No results found for the place name:", placeName);
+    }
+  })
+  .catch(error => {
+    console.error("Error fetching data from the Nominatim API:", error);
+  });
+
     // List of values to disable
     
-    // document.getElementById("bookNowButton").addEventListener("click", targetVenuebooking());
-    
-    
+    // document.getElementById("bookNowButton").addEventListener("click", targetVenuebooking());    
 </script>
 
 

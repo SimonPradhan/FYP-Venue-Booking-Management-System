@@ -43,21 +43,6 @@ def khalti(request):
             'details':str(e),
         })
 
-# from django.contrib.sessions.models import Session
-# from django.utils import timezone
-
-# def decode_sessionid(sessionid):
-#     try:
-#         session = Session.objects.get(session_key=sessionid)
-#         # Check if the session is expired
-#         if session.expire_date < timezone.now():
-#             return None
-#         # Decode the session data
-#         session_data = session.get_decoded()
-#         return session_data
-#     except Session.DoesNotExist:
-#         return None
-
 def invoice(email, amount, product_name, idx):
     print(email, amount, product_name, idx)
     

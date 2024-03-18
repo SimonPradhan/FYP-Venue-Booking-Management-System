@@ -1,34 +1,35 @@
-{%extends 'base.html'%}
-{%load static%}
+{% extends 'base.html' %}
+{% load static %}
 
-{%block content%}
+{% block content %}
 <html>
+
 <head>
     <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
 
 </head>
+
 <body>
-    <div class="dflex justify-content-center align-items-center">
+    <div class="d-flex justify-content-center align-items-center">
         <h2 class="font-montserrat">Payment Method</h2>
     </div>
-    {%if user.is_authenticated%}
+    {% if user.is_authenticated %}
     <span class="d-block p-5 bg-grey">
         <div class="container d-flex justify-content-center">
             <button class="btn btn-primary" id="payment-button" onclick="">Pay with Khalti</button>
-        </div>  
-    </div>
+        </div>
     </span>
-    {%endif%}
-    {%if not user.is_authenticated%}
+    {% endif %}
+    {% if not user.is_authenticated %}
     <span class="d-block p-5 bg-grey">
         <div class="container d-flex justify-content-center">
-            <a href="{%url 'user:login'%}" class="btn btn-primary">Login to Book</a>
+            <a href="{% url 'user:login' %}" class="btn btn-primary">Login to Book</a>
         </div>
-    {%endif%}
+    </span>
+    {% endif %}
 
     <!-- Place this where you need payment button -->
-    <!-- Place this where you need payment button -->
-    <!-- Paste this code anywhere in you body tag -->
+    <!-- Paste this code anywhere in your body tag -->
     <script>
         var config = {
             // replace the publicKey with yours
@@ -42,30 +43,30 @@
                 "MOBILE_BANKING",
                 "CONNECT_IPS",
                 "SCT",
-                ],
+            ],
             "eventHandler": {
-                onSuccess (payload) {
+                onSuccess(payload) {
                     // hit merchant api for initiating verfication
                     console.log(payload);
-                    fetch("{%url 'payments:khalti' %}", {
+                    fetch("{% url 'payments:khalti' %}", {
                         method: 'post',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify(payload)
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data);
-                        if (data.status){
-                            alert("Payment Successful");
-                        }
-                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            if (data.status) {
+                                alert("Payment Successful");
+                            }
+                        })
                 },
-                onError (error) {
+                onError(error) {
                     console.log(error);
                 },
-                onClose () {
+                onClose() {
                     console.log('widget is closing');
                 }
             }
@@ -75,10 +76,11 @@
         var btn = document.getElementById("payment-button");
         btn.onclick = function () {
             // minimum transaction amount must be 10, i.e 1000 in paisa.
-            checkout.show({amount: 1000});
+            checkout.show({ amount: 1000 });
         }
     </script>
-    <!-- Paste this code anywhere in you body tag -->   
+    <!-- Paste this code anywhere in your body tag -->
 </body>
+
 </html>
-{%endblock%}
+{% endblock %}
