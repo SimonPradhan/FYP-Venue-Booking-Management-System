@@ -25,8 +25,9 @@ def showBookings(request):
     venues = Venue.objects.filter(vendor_id=vendor_id)
     print(venues, user, vendor_id)
     context = {
-        'bookings': Booking.objects.filter(venue__in=venues).values(),
+        'bookings': Booking.objects.filter(venue__in=venues),
         'vendor': user,
         'venues': venues,  # Pass the venues to the template if needed
     }
+    print(context)
     return render(request, 'vendor/viewBooking.html', context)

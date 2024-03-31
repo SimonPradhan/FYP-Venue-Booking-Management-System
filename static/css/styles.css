@@ -10,6 +10,16 @@
     font-family: 'Montserrat', sans-serif;
 }
 
+header {
+    position: sticky; 
+    top: 0; 
+    z-index: 9999;
+}
+
+.blur-image {
+    filter: blur(3px); /* Adjust the blur amount as needed */
+}
+
 body{
     background-color: #D7D7D7;
 }
@@ -37,10 +47,7 @@ body{
   }
   
   .footer {
-
-    padding: 10px;
     bottom: 0;
-
     width: 100%;
     background-color: #f8f9fa;
 }

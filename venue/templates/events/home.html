@@ -1,90 +1,96 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <div class="container text-center">
-        <div class="font-montserrat">
-            <h1>Book Now</h1>
-            <h2>Venue of Choice</h2>
-        </div>
+<div class="container text-center">
+    <div class="font-montserrat">
+        <h1>Book Now</h1>
+        <h2>Venue of Choice</h2>
     </div>
-    <img src="{% static 'images/venue.png' %}" style="width: 94.9rem;" alt="Responsive image">
-    <div class="main">
-        
-    </div>
-    <div class="container mt-3 mb-3">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <form class="d-flex" role="search" method="post">
-                    <div class="input-group">
-                        <input type="search" class="form-control" placeholder="Search Venues..." aria-label="search" name="search">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button">Search</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="container d-flex justify-content-center font-montserrat">
-        <h1> Top Venues</h1>
-    </div>
-    <div class="container sm-4">
-        <div class="row">
-            {% if search_data %}
-            <h3>Search Results for "{{ search_data }}":</h3>
-            {% for venue in data %}
-                <!-- Display search results -->
-            {% endfor %}
-        {% else %}
-            {% for venue in list_venue %}
-                <div class="col-md-4 mb-3">
-                    <div class="card" onclick="toggleDescription(this)" style="cursor:pointer;">
-                        <img src="/media/{{ venue.image }}" class="card-img-top rounded-top" alt="{{ venue.name }} Image" width="400" height="400">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ venue.name }}</h5>
-                            <ul class="list-unstyled">
-                                <li><strong>Address:</strong> {{ venue.address }}</li>
-                                <li><strong>Price:</strong> {{ venue.price }} (per plates)</li>
-                                <li><strong>Capacity:</strong> {{ venue.capacity }} people</li>
-                                <li><strong>Phone:</strong> {{ venue.phone }}</li>
-                                <div class="description" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;">
-                                    <li><strong>Description:</strong>
-                                    {{ venue.description }}
-                                    </li>
-                                    <br>
-                                    <a href="{% url 'venue:payment' %}" class="btn btn-primary ">
-                                        <div class="row">
-                                            <div class="col-2">
-                                                <i class="bi bi-journal-bookmark"></i>
-                                            </div>
-                                            <div class="col-2">
-                                                Book Now
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <!-- <button class="btn btn-primary" onclick="window.location.href='{% url 'venue:payment'%}'">Book Now</button> -->
-                                </div>
-                            </ul>
-                        </div>
+</div>
+
+<div class="main">
+
+</div>
+<div class="container mt-3 mb-3">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form class="d-flex" role="search" method="post">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="search" class="form-control" placeholder="Search Venues..." aria-label="search"
+                        name="search">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button">Search</button>
                     </div>
                 </div>
-            {% endfor %}
-        {% endif %}
+            </form>
         </div>
     </div>
+</div>
 
-    <script>
-        function toggleDescription(card) {
-            const descriptionDiv = card.querySelector('.description');
-            const maxHeight = descriptionDiv.scrollHeight;
-            descriptionDiv.style.maxHeight = descriptionDiv.style.maxHeight === '0px' ? maxHeight + 'px' : '0px';
+<img src="{% static 'images/venue.png' %}" class="img-fluid" style="width: 94.9rem;" alt="Responsive image">
 
-            // Scroll towards the description 50% of the way
-            const halfwayPoint = window.innerHeight / 2;
-            descriptionDiv.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+<div class="container d-flex justify-content-center font-montserrat">
+    <h1> Top Venues</h1>
+</div>
+<div class="container sm-4">
+    <div class="row">
+        {% if search_data %}
+        <h3>Search Results for "{{ search_data }}":</h3>
+        {% for venue in data %}
+        <!-- Display search results -->
+        {% endfor %}
+        {% else %}
+        {% for venue in list_venue %}
+        <div class="col-md-4 mb-3">
+            <div class="card" onclick="toggleDescription(this)" style="cursor:pointer;">
+                <img src="/media/{{ venue.image }}" class="card-img-top rounded-top" alt="{{ venue.name }} Image"
+                    width="400" height="400">
+                <div class="card-body">
+                    <h5 class="card-title">{{ venue.venuename }}</h5>
+                    <ul class="list-unstyled">
+                        <li><strong>Address:</strong> {{ venue.address }}</li>
+                        <li><strong>Price:</strong> {{ venue.price }} (per plates)</li>
+                        <li><strong>Capacity:</strong> {{ venue.capacity }} people</li>
+                        <li><strong>Phone:</strong> {{ venue.phone }}</li>
+                        <div class="description"
+                            style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;">
+                            <li><strong>Description:</strong>
+                                {{ venue.description }}
+                            </li>
+                            <br>
+                            <a href="{% url 'venue:payment' %}" class="btn btn-primary">
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-2">
+                                        <i class="bi bi-journal-bookmark"></i>
+                                    </div>
+                                    <div>Book Now</div>
+                                </div>
+                            </a>
+                            
+                            <!-- <button class="btn btn-primary" onclick="window.location.href='{% url 'venue:payment'%}'">Book Now</button> -->
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
 
-            // Alternatively, you can scroll to a specific offset if you want more control
-            window.scrollBy(0, halfwayPoint);
-        }
-    </script>
+<script>
+    function toggleDescription(card) {
+        const descriptionDiv = card.querySelector('.description');
+        const maxHeight = descriptionDiv.scrollHeight;
+        descriptionDiv.style.maxHeight = descriptionDiv.style.maxHeight === '0px' ? maxHeight + 'px' : '0px';
+
+        // Scroll towards the description 50% of the way
+        const halfwayPoint = window.innerHeight / 2;
+        descriptionDiv.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+
+        // Alternatively, you can scroll to a specific offset if you want more control
+        window.scrollBy(0, halfwayPoint);
+    }
+</script>
 {% endblock %}
