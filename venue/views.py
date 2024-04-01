@@ -12,14 +12,20 @@ from .models import Venue
 
 def home(request):
     list_venue = Venue.objects.all()
-    search_data = request.GET.get('search')
+    name = request.GET.get('name')
+    location = request.GET.get('location')
     
-    if search_data is not None and search_data.strip():  # Check for non-empty search string
-        data = Venue.objects.filter(title__icontains=search_data)
-        return render(request, 'events/home.html', {'data': data, 'list_venue': list_venue, 'search_data': search_data})
+    if name:
+        list_venue = list_venue.filter(venuename__icontains=name)
+    if location:
+        list_venue = list_venue.filter(address__icontains=location)
     
-    return render(request, 'events/home.html', {'list_venue': list_venue})
+    return render(request, 'events/home.html', {'list_venue': list_venue, 'name': name, 'location': location})
 
+
+
+def gallery(request):
+    return render(request,'events/gallery.html')
 
 def contactus(request):
     return render(request,'events/contactus.html')
