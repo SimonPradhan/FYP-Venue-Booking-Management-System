@@ -5,10 +5,11 @@ from user.models import UserVendor
 # Create your views here.
 def vendor(request):
     vendor_id = request.session.get('vendor_id')
+    totalbooking = Booking.objects.filter().count()
     print(vendor_id)
     vendor = UserVendor.objects.get(id = vendor_id)
 
-    return render(request,'vendor/dashboard.html', {"vendor":vendor})
+    return render(request,'vendor/dashboard.html', {"vendor":vendor, "totalbooking":totalbooking})
 
 def details(request):
     return render(request,'vendor/details.html', {"name":"name"})

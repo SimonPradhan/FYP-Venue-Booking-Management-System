@@ -12,15 +12,15 @@ from .models import Venue
 
 def home(request):
     list_venue = Venue.objects.all()
-    name = request.GET.get('name')
+    venuename = request.GET.get('venuename')
     location = request.GET.get('location')
     
-    if name:
-        list_venue = list_venue.filter(venuename__icontains=name)
+    if venuename:
+        list_venue = list_venue.filter(venuename__icontains=venuename)
     if location:
         list_venue = list_venue.filter(address__icontains=location)
     
-    return render(request, 'events/home.html', {'list_venue': list_venue, 'name': name, 'location': location})
+    return render(request, 'events/home.html', {'list_venue': list_venue, 'venuename': venuename, 'location': location})
 
 
 
@@ -31,9 +31,9 @@ def contactus(request):
     return render(request,'events/contactus.html')
 
 def payment(request):
-    url = "https://khalti.com/api/v2/merchant-transaction/<idx>/"
+    url = "https://a.khalti.com/api/v2/merchant-transaction/<idx>/"
     headers = {
-        "Authorization": "Key test_secret_key_f59e8b7d18b4499ca40f68195a846e9b"
+        "Authorization": "Key test_secret_key_7f0d2106c6e94bc2b98a108cbf9d7bf6"
         }
 
     response = request.get(url, headers = headers)

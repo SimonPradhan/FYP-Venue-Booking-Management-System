@@ -73,7 +73,7 @@
 
 
 <!-- Booking Modal -->
-<div class="modal fade right" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+<div class="modal fade right my-5" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down">
         <div class="modal-content">
             <div class="modal-header">
@@ -136,6 +136,10 @@
                         <textarea class="form-control" id="message" name="message" rows="3"></textarea>
                     </div>
 
+                    <div class="cost" id="cost">
+                        <h4>Cost: $</h4>
+                    </div>
+
                     <button type="submit" value="Book"   class="btn btn-primary bookNowButton" id="bookNowButton">Book Now</button>
 
                 </form>
@@ -152,6 +156,8 @@
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
+    total_costs = venue.price * document.getElementById('guests');
+    document.getElementById('cost').innerHTML = "<h4>Cost: $" + total_costs + "</h4>";
     document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
