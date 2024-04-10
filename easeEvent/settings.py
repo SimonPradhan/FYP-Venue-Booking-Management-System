@@ -26,12 +26,16 @@ SECRET_KEY = 'django-insecure-hju8d^&g)p_hhoq4wpyhn#th*u#985u09n+x@#^o%p%*bdf3g$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+#Asgi application
+
+
 ALLOWED_HOSTS = []
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'venue',
     'user',
     'vendor',
@@ -77,7 +81,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'easeEvent.wsgi.application'
-
+ASGI_APPLICATION = 'easeEvent.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -166,3 +170,10 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+
