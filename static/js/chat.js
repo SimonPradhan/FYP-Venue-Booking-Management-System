@@ -1,5 +1,5 @@
 const text_box = '<div class="container darker">' +
-                        '<img src="{% static 'images/user_image.jpg' %}" alt="Avatar" class="right" style="width:100%;">'
+                        '<img src="{% static 'images/venue.png' %}" alt="Avatar" class="right" style="width:100%;">'
                         + '<p>{message}</p>' +
                         '<span class="time-right">{time}</span>'
                     + '</div>';

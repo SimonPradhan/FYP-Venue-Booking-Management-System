@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -172,8 +173,8 @@ EMAIL_USE_SSL = False
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',  # Use in-memory channel layer for development
+    },
 }
 

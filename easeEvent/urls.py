@@ -23,7 +23,7 @@ urlpatterns = [
     path('', include("adminPanel.urls")),
     path('',include("venue.urls")),
     path('',include("vendor.urls")),
-    path('',include("chats.urls")),
+    path('chat/',include("chats.urls")),
     path('user/',include("user.urls")),
     path('user/',include("django.contrib.auth.urls")),
     path('payments/',include("payments.urls")),

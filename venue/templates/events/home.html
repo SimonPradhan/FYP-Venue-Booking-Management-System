@@ -11,7 +11,8 @@
 <div class="main">
 
 </div>
-<div class="container mt-3 mb-3">
+
+<div class="container position-absolute" style="margin-top: 620px; margin-left: 100px;" >
     <div class="row justify-content-center">
         <div class="col-md-6">
             <form class="d-flex" role="search" method="get">
@@ -21,7 +22,7 @@
                     <input type="search" class="form-control" placeholder="Search Venues by Location..." aria-label="search"
                         name="location" value="{{ location }}">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-primary" type="submit">Search</button>
+                        <button class="btn btn-primary" type="submit">Search</button>
                     </div>
                 </div>
             </form>
@@ -30,10 +31,10 @@
         </div>
     </div>
 </div>
-
 <img src="{% static 'images/venue.png' %}" class="img-fluid" style="width: 94.9rem;" alt="Responsive image">
 
-<div class="container d-flex justify-content-center font-montserrat">
+
+<div class="container d-flex justify-content-center font-montserrat" style="margin-top: 40px; padding: 10px;">
     <h1> Top Venues</h1>
 </div>
 <div class="container sm-4">

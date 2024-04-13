@@ -5,7 +5,7 @@ from user.models import UserVendor
 # Create your views here.
 @login_required
 def chat(request):
-    return render(request,'chatPortal.html')
+    return render(request,'chatPortal.html', {'rooms': Room.objects.all()})
 
 # def vendor_list(request):
 #     vendor_list = UserVendor.objects.all()
