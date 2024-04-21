@@ -51,7 +51,23 @@
                 <a class="btn btn-primary" href="{%url 'user:login'%}">Login</a>
                 {% endif %}
                 {% if user.is_authenticated %}
-                <a class="btn btn-primary" href="{%url 'user:logout_user'%}">LogOut</a>
+                <div class="afterlogin">
+                    <div class="col-md-12 dropdown">
+                        <a class="btn btn-primary d-flex align-items-center border-rounded dropdown-toggle" href="#" role="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ profile.dp_img.url }}" alt="dp-img.png" class="rounded-circle" style="width: 32px; height: 32px;">
+                            <div class="name">{{ profile.name.split.0 }}</div>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                            <li><a class="dropdown-item" href="{% url 'user:profile' %}">Manage Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'user:logout_user' %}">Log Out</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                
+                    <!-- {% endif %}
+                {% if user.is_authenticated %} -->
                 {% endif %}
             </div>
         </div>

@@ -3,11 +3,12 @@ from venue.models import Booking, Venue
 from user.models import UserVendor
 
 # Create your views here.
+
 def vendor(request):
     vendor_id = request.session.get('vendor_id')
-    totalbooking = Booking.objects.filter().count()
-    print(vendor_id)
     vendor = UserVendor.objects.get(id = vendor_id)
+    totalbooking = Booking.objects.filter().count()
+    # totalCustomer = Booking.objects.filter(vendor= Venue.venue_id).count()
 
     return render(request,'vendor/dashboard.html', {"vendor":vendor, "totalbooking":totalbooking})
 

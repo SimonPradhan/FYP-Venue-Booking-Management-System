@@ -3,55 +3,62 @@
 {% block content %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.css" rel="stylesheet" />
+<style>
+    /* Additional CSS styles for responsiveness */
+    @media (max-width: 768px) {
+        /* Adjust styles for smaller screens */
+        .img-fluid {
+            max-width: 100%;
+            height: auto;
+        }
+        .p-3 {
+            padding: 1rem !important;
+        }
+    }
+</style>
 
 <div class="container">
     <a href="{% url 'venue:explore' %}" class="btn btn-primary mt-3 ml-3 mb-3">
         <i class="bi bi-arrow-left"></i> Back to Explore
     </a>
     <div class="row">
-        <div class="d-flex justify-content-between">
-            <!-- Image on the left side -->
-            <div>
-                <img src="/media/{{ venue.image }}" alt="{{ venue.name }} Image" class="img-fluid"
-                    style="max-width: 400px" />
-            </div>
-            <div class="cols p-3">
-                <div class="ml-4">
-                    <h2>{{ venue.venuename }}</h2>
-                    <ul class="list-unstyled">
-                        <li><strong>Address:</strong> {{ venue.address }}</li>
-                        <li><strong>Price:</strong> {{ venue.price }} (per plate)</li>
-                        <li><strong>Capacity:</strong> {{ venue.capacity }} people</li>
-                        <li><strong>Phone:</strong> {{ venue.phone }}</li>
-                        <li><strong>Description:</strong> {{ venue.description }}</li>
-                    </ul>
-                    <!-- Add more details as needed -->
+        <div class="col-md-6">
+            <img src="/media/{{ venue.image }}" alt="{{ venue.name }} Image" class="img-fluid mb-3" />
+        </div>
+        <div class="col-md-6">
+            <div class="p-3">
+                <h2>{{ venue.venuename }}</h2>
+                <ul class="list-unstyled">
+                    <li><strong>Address:</strong> {{ venue.address }}</li>
+                    <li><strong>Price:</strong> {{ venue.price }} (per plate)</li>
+                    <li><strong>Capacity:</strong> {{ venue.capacity }} people</li>
+                    <li><strong>Phone:</strong> {{ venue.phone }}</li>
+                    <li><strong>Description:</strong> {{ venue.description }}</li>
+                </ul>
+                <!-- Add more details as needed -->
 
-                    <!-- Back button to explore page with icon -->
-                </div>
-                <div class="buttons p-4">
-                    <!-- chat now button -->
-                    <a href="{% url 'chats:chat' %}" class="btn btn-primary">
-                        <div class="row align-items-center jus">
-                            <div class="col-2">
-                                <i class="bi bi-chat-dots"></i>
-                            </div>
-                            <div class="col-2">Chat Now</div>
-                        </div>
-                    </a>
-                    <!-- book now button  -->
-                    <button class="btn btn-primary book-now-btn" data-bs-toggle="modal" data-bs-target="#bookingModal">
-                        <div class="row align-items-center">
-                            <div class="col-2">
-                                <i class="bi bi-journal-bookmark"></i>
-                            </div>
-                            <div class="col-2">Book Now</div>
-                        </div>
-                    </button>
-
-                </div>
+                <!-- Back button to explore page with icon -->
             </div>
-            <!-- Details on the right side -->
+            <div class="buttons p-4">
+                <!-- chat now button -->
+                <a href="{% url 'chats:chat' %}" class="btn btn-primary">
+                    <div class="row align-items-center">
+                        <div class="col-2">
+                            <i class="bi bi-chat-dots"></i>
+                        </div>
+                        <div class="col-2">Chat Now</div>
+                    </div>
+                </a>
+                <!-- book now button  -->
+                <button class="btn btn-primary book-now-btn" data-bs-toggle="modal" data-bs-target="#bookingModal">
+                    <div class="row align-items-center">
+                        <div class="col-2">
+                            <i class="bi bi-journal-bookmark"></i>
+                        </div>
+                        <div class="col-2">Book Now</div>
+                    </div>
+                </button>
+            </div>
         </div>
     </div>
     <div class="row mt-4">
@@ -63,16 +70,11 @@
 
         <!-- Map section -->
         <div class="col-md-6 mb-3">
-            <h3>Map</h3>
-            <div id="map" style="height: 400px; border: 2px solid #000000"></div>
+            <h3>Google Map</h3>
+            <div id="google-map" style="height: 400px; border: 2px solid #000000"></div>
         </div>
     </div>
-
 </div>
-
-
-
-<!-- Booking Modal -->
 <div class="modal fade right my-5" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down">
         <div class="modal-content">
@@ -155,9 +157,28 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/fullcalendar.min.js"></script>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 <script>
-    total_costs = venue.price * document.getElementById('guests');
-    document.getElementById('cost').innerHTML = "<h4>Cost: $" + total_costs + "</h4>";
+    // Function to update the total cost based on the number of guests
+    function updateTotalCost() {
+        // Get the number of guests input field
+        var guestsInput = document.getElementById('guests');
+        
+        // Get the price per plate (assuming it's already defined)
+        var pricePerPlate = {{ venue.price }};
+        
+        // Calculate the total cost
+        var totalCost = guestsInput.value * pricePerPlate;
+        
+        // Update the HTML content to display the total cost
+        document.getElementById('cost').innerHTML = "<h4>Cost: $" + totalCost + "</h4>";
+    }
+    
+    // Add an event listener to the "Number of Guests" input field
+    document.getElementById('guests').addEventListener('input', updateTotalCost);
+</script>
+
+<script>
     document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {

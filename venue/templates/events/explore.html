@@ -2,13 +2,20 @@
 {% load static %}
 
 {% block content %}
+
 <div class="container mt-3 mb-3">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{%url 'venue:home'%}">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Explore</li>
+        </ol>
+      </nav>
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search Venues...">
                 <div class="input-group-append">
-                    <button class="btn btn-outline-primary" type="button">Search</button>
+                    <button class="btn btn-primary" type="button">Search</button>
                 </div>
             </div>
         </div>

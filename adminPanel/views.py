@@ -4,8 +4,8 @@ from venue.models import Booking
 from user.views import UserVendor
 from django.contrib.auth.models import User
 from django.contrib import messages
-def index(request):
-    return render(request, 'adminPanel/index.html', {"name":"name"})
+# def index(request):
+#     return render(request, 'adminPanel/adminDashboarad.html', {"name":"name"})
 
 def adminDashboard(request):
     totalVendor = UserVendor.objects.count()

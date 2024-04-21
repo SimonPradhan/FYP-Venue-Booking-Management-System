@@ -82,14 +82,26 @@ function connect() {
                 chatLog.value += data.user + " joined the room.\n";
                 onlineUsersSelectorAdd(data.user);
                 break;
-            case "user_leave":
+            case "user_leave":  
                 chatLog.value += data.user + " left the room.\n";
                 onlineUsersSelectorRemove(data.user);
+                break;
+            case "private_message":
+                chatLog.value += "PM from " + data.user + ": " + data.message + "\n";
+                break;
+            case "private_message_delivered":
+                chatLog.value += "PM to " + data.target + ": " + data.message + "\n";
                 break;
         }
     
         // scroll 'chatLog' to the bottom
         chatLog.scrollTop = chatLog.scrollHeight;
+    };
+
+    onlineUsersSelector.onchange = function() {
+        chatMessageInput.value = "/pm " + onlineUsersSelector.value + " ";
+        onlineUsersSelector.value = null;
+        chatMessageInput.focus();
     };
 
     chatSocket.onerror = function(err) {

@@ -1,9 +1,9 @@
 from django.urls import path
-from .views import index, show_vendors, delete_vendor, add_vendor, update_vendor, show_cust, add_cust, update_cust, delete_cust, adminDashboard, show_books
+from .views import show_vendors, delete_vendor, add_vendor, update_vendor, show_cust, add_cust, update_cust, delete_cust, adminDashboard, show_books
 
 app_name='adminPanel'
 urlpatterns = [
-    path('index/', index, name='index'),
+    # path('index/', index, name='index'),
     path('dashboard/', adminDashboard, name='dashboard'),
     path('show_vendors/', show_vendors, name='show_vendors'),
     path('add_vendor/', add_vendor, name='add_vendor'),

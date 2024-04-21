@@ -35,36 +35,16 @@
                 <h4>EaseEvent</h4>
             </a>
         </div>
-        <hr class="mt-0 mb-4">
-        <div class="friends" style="y-overflow: auto">
-            <ul class="list-group">
-                {% for vendor in vendors %}
-                <a href="/chat/{{friend.username}}">
-                    <li class="list-group-item list-group-item-action">
-                        <div class="row">
-                            <div class="col">
-                                <img src="{% static 'images/user_image.jpg' %}" style="width: 50px; height: 50px;">
-                            </div>
-                            <div class="col">
-                                <div class="row" style="font-color: #000">
-                                    <p>{{vendor.name}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </a>
-                {% endfor %}
-            </ul>
-        </div>
-
     </div>
 
     <div class="main">
-        {% block content %}
-        <div style="margin-top: 40vh; text-align: center">
+        <div style="margin-top: 20vh; text-align: center">
             <h2>Select a chat & start messaging!</h2>
         </div>
-        {% endblock %}
+        <div class="contain">
+            {% block content %}
+            {% endblock %}
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"

@@ -230,3 +230,10 @@ def logoutUser(request):
     logout(request)
     request.session.flush()
     return redirect("venue:home")
+
+def profile(request):
+    context = {
+        'profile': UserCustomer.objects.get(id = request.session.get('user_id'))
+    }
+    
+    return render(request, 'profile.html', context)

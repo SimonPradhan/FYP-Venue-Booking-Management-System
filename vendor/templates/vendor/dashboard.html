@@ -1,22 +1,12 @@
+{% extends 'vendor.html' %}
 
-{%extends 'vendor.html'%}
-{%load static%}
 {% block content %}
-<head>
-    <!-- Custom styles for this template -->
-    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
-
-  </head>
-
 <div class="container-fluid">
-  
   <div class="row">
-
-
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Dashboard</h1>
-        
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -27,31 +17,61 @@
             This week
           </button>
         </div>
-        
       </div>
       <div class="row">
-        <div class="box">
-          <div class="row">
-              <div class="col-md-3">
-                  <div class="card">
-                      <div class="card-body">
-                          <h5 class="card-title">Total Customers</h5>
-                          <p class="card-text">{{totalCust}}</p>
-                      </div>
-                  </div>
-              </div>
-              <div class="col-md-3">
-                  <div class="card">
-                      <div class="card-body">
-                          <h5 class="card-title">Total Bookings</h5>
-                          <p class="card-text">{{totalbooking}}</p>
-                      </div>
-                  </div>
-              </div>
+        <div class="col-md-6 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Total Customers</h5>
+              <p class="card-text">{{ totalCustomer }}</p>
+            </div>
           </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Total Bookings</h5>
+              <p class="card-text">{{ totalbooking }}</p>
+            </div>
+          </div>
+        </div>
       </div>
-      </div>
+      <canvas id="chart" width="500" height="200">
+      </canvas>
     </main>
   </div>
 </div>
-{%endblock%}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+<script>
+
+  let ctx = document.getElementById("chart").getContext("2d");
+
+  let myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Total Bookings', 'Total Customers'],
+      datasets: [{
+        label: 'Count',
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)', // Red color for bookings
+          'rgba(54, 162, 235, 0.2)' // Blue color for customers
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+</script>
+{% endblock %}

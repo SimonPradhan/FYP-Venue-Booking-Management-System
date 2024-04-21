@@ -8,19 +8,17 @@ from django.core.serializers.json import DjangoJSONEncoder
 import json
 
 from django.shortcuts import render
-from .models import Venue
+from django.db.models import Q
 
 def home(request):
+    profile = UserCustomer.objects.get(id = request.session.get('user_id'))
     list_venue = Venue.objects.all()
-    venuename = request.GET.get('venuename')
-    location = request.GET.get('location')
+    query = request.GET.get('query', '')  # Get the search query from the request
+    if query:
+        # Filter venues based on the query for both venuename and location
+        list_venue = list_venue.filter(Q(venuename__icontains=query) | Q(address__icontains=query))
     
-    if venuename:
-        list_venue = list_venue.filter(venuename__icontains=venuename)
-    if location:
-        list_venue = list_venue.filter(address__icontains=location)
-    
-    return render(request, 'events/home.html', {'list_venue': list_venue, 'venuename': venuename, 'location': location})
+    return render(request, 'events/home.html', {'list_venue': list_venue, 'query': query, 'profile': profile})
 
 
 
@@ -48,7 +46,7 @@ def partData(request, id):
     request.session['venue_id'] = id
     bookingdata=Booking.objects.filter(venue_id=id).values()
     booking_list = list(bookingdata)
-    print(booking_list)
+    # print(booking_list)
     for booking in booking_list:
         booking['date'] = booking['date'].strftime('%Y-%m-%d') if booking['date'] else None
         booking['time'] = booking['time'].strftime('%H:%M') if booking['time'] else None
@@ -100,3 +98,4 @@ def booking(request):
 
     # Return HttpResponse or render a template for GET requests
     return render(request, 'events/venue.html', {'venue': venue})
+
