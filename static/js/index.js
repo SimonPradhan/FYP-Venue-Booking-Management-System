@@ -12,11 +12,15 @@ document.querySelector("#roomInput").onkeyup = function(e) {
 };
 
 // redirect to '/room/<roomInput>/'
-document.querySelector("#roomConnect").onclick = function() {
-    let roomName = document.querySelector("#roomInput").value;
-    window.location.pathname = "chat/" + roomName + "/";
+document.querySelector("#chatbutton").onclick = function() {
+    // let roomName = document.querySelector("#roomInput").value;
+    console.log("hi");
+    var userid=request.user_id;
+    console.log(userid);
+    console.log(roomName);
+    window.location.pathname = "chat/" + roomName + "/";    
 }
-
+z
 // redirect to '/room/<roomSelect>/'
 document.querySelector("#roomSelect").onchange = function() {
     let roomName = document.querySelector("#roomSelect").value.split(" (")[0];

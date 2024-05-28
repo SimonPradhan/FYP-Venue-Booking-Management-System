@@ -1,9 +1,12 @@
 from django.contrib.auth.models import User
 from django.db import models
+from user.models import UserCustomer, UserVendor
 
 
 class Room(models.Model):
     name = models.CharField(max_length=128)
+    user_id = models.ForeignKey(to=UserCustomer, on_delete=models.CASCADE)
+    vendor_id = models.ForeignKey(to=UserVendor, on_delete=models.CASCADE)  
     online = models.ManyToManyField(to=User, blank=True)
 
     def get_online_count(self):

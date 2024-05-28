@@ -1,73 +1,237 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
-<div class="container">
-    <div class="head position-absolute">
-        <h1>Book Now</h1>
-        <h2>Venue of Choice</h2>
-    </div>
-</div>
+<style>
+    /* .data{
+        background-color: #edede9ff;
+    } */
+    /*  */
+    /* @media screen and (min-width: 576) {
+        .carousel-inner{
+            display: flex;
+        }
 
-<div class="main">
+        .carousel-item{
+            display: block;
+            margin-right: 0;
+            flex: 0 0 calc(100% / 3);
 
-</div>
+        }
+    } */
 
-<img src="{% static 'images/venue.png' %}" class="img-fluid" style="width: 94.9rem; filter: blur(2px); -webkit-filter: blur(2px);" alt="Responsive image">
-<div class="container position-relative justify-content-center" style="margin-top: -1.2rem;">
-    <div class="row justify-content-center">
-        <div class="col-md-6" >
-            <form class="d-flex" role="search" method="get">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
-                    <input type="search" class="form-control " placeholder="Search Venues by Name or Location..."
-                        aria-label="search" name="query" value="{{ query }}">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="submit">Search</button>
+    @media (min-width: 768px) {
+        .carousel-inner {
+            display: flex;
+        }
+
+        .carousel-item {
+            margin-right: 0;
+            flex: 0 0 33.333333%;
+            display: block;
+        }
+    }
+
+    .carousel-inner {
+        padding: 1em;
+    }
+
+    .card {
+        margin: 0 .5em;
+        box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
+        border: none;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        background-color: #e1e1e1;
+        width: 6vh;
+        height: 6vh;
+        border-radius: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .card {
+        cursor: pointer;
+        width: 100%;
+        margin-bottom: 20px;
+        perspective: 1000px;
+    }
+
+    .card-inner {
+        position: relative;
+        width: 100%;
+        height: 400px;
+        transition: transform 0.5s;
+        transform-style: preserve-3d;
+    }
+
+    .card-front,
+    .card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+    }
+
+    .card-front {
+        z-index: 2;
+    }
+
+    .card-back {
+        transform: rotateY(180deg);
+        z-index: 1;
+        padding: 20px;
+        /* Add padding to contain the content */
+        box-sizing: border-box;
+        /* Ensure padding is included in width calculation */
+        overflow-y: auto;
+        /* Add scroll if content exceeds height */
+    }
+
+    .card.flipped .card-inner {
+        transform: rotateY(180deg);
+    }
+
+    .card-img-top {
+        width: 100%;
+        height: auto;
+    }
+
+    .card-body {
+        padding: 1.25rem;
+    }
+
+    .description {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
+
+    .card .img-wrapper {
+        max-width: 100%;
+        height: 13em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    img {
+        max-height: 100%;
+    }
+
+</style>
+
+<div class="mbox p-0" style="background-color: rgba(194, 129, 244, 0.589);" id="background-image">
+        <div class="head position-absolute">
+            <h1>Book Now</h1>
+            <h2>Venue of Choice</h2>
+            {% if user.is_authenticated %}
+            <h3>Welcome, {{ profile.name.split.0 }}</h3>
+            {% endif %}
+        </div>
+    <img src="{% static 'images/venue.png' %}" class="responsive-image" style="width: 100%; height: 70vh; opacity: 80%;"
+        alt="Responsive image">
+    <div class="container position-relative justify-content-center"
+        style="margin-top: -8.2rem; -webkit-margin-top: -8.2rem">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form class="d-flex" role="search" method="get">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                        <input type="search" class="form-control" placeholder="Search Venues by Name or Location..."
+                            aria-label="search" name="query" value="{{ query }}">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="submit">Search</button>
+                        </div>
                     </div>
-                </div>
-            </form>
-            
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
 
-<div class="container d-flex justify-content-center" style="padding: 5px;">
-    <h1 style="font-size: 50px; font-weight: 300;"> Top Venues</h1>
+<div class="container p-5 mt-5 mb-5">
+    <h2 class="text-center text-dark p-3">Explore...</h2>
+    <div id="venueCarousel" class="carousel slide p-4" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            {% for venue in list_venue %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <div class="row">
+                    <div class="col-md-4" style="width: 300px;">
+                        <div class="img-wrapper">
+                            <div class="card p-2" onclick="toggleDescription(this)">
+                                <div class="card-inner">
+                                    <div class="card-front">
+                                        <img src="/media/{{ venue.image }}" class="card-img-top rounded-top h-100"
+                                            alt="{{ venue.name }} Image">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if forloop.counter|divisibleby:3 or forloop.last%}
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="row">
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#venueCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#venueCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
 </div>
-<div class="container sm-4">
-    <div class="row">
+
+<div class="container d-flex justify-content-center" style="padding: 5px; margin-top:78px">
+    <h1 class="text-decoration-underline text-dark" style="font-size: 50px; font-weight: 300; font-weight: 400;"> Top
+        Venues</h1>
+</div>
+
+<div class="container p-3 mt-3 mb-3 data">
+    <div class="row ">
         {% if search_data %}
         <h3>Search Results for "{{ search_data }}":</h3>
         {% for venue in list_venue %}
         {% if venue.venuename|lower == search_data|lower %}
         <div class="col-md-4 mb-3">
-            <div class="card" onclick="toggleDescription(this)" style="cursor:pointer;">
-                <img src="/media/{{ venue.image }}" class="card-img-top rounded-top" alt="{{ venue.name }} Image"
-                    width="400" height="400">
-                <div class="card-body">
-                    <h5 class="card-title">{{ venue.venuename }}</h5>
-                    <ul class="list-unstyled">
-                        <li><strong>Address:</strong> {{ venue.address }}</li>
-                        <li><strong>Price:</strong> {{ venue.price }} (per plates)</li>
-                        <li><strong>Capacity:</strong> {{ venue.capacity }} people</li>
-                        <li><strong>Phone:</strong> {{ venue.phone }}</li>
-                        <div class="description"
-                            style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;">
-                            <li><strong>Description:</strong>
-                                {{ venue.description }}
-                            </li>
-                            <br>
-                            <a href="{% url 'venue:payment' %}" class="btn btn-primary">
-                                <div class="d-flex align-items-center">
-                                    <div class="mr-2">
-                                        <i class="bi bi-journal-bookmark"></i>
+            <div class="card p-5 shadow-lg" onclick="toggleDescription(this)">
+                <div class="card-inner second-inner">
+                    <div class="card-front">
+                        <img src="/media/{{ venue.image }}" class="card-img-top rounded-top"
+                            alt="{{ venue.name }} Image">
+                    </div>
+                    <div class="card-back">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ venue.venuename }}</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>Address:</strong> {{ venue.address }}</li>
+                                <li><strong>Price:</strong> {{ venue.price }} (per plates)</li>
+                                <li><strong>Capacity:</strong> {{ venue.capacity }} people</li>
+                                <li><strong>Phone:</strong> {{ venue.phone }}</li>
+                                <li><strong>Description:</strong> {{ venue.description }}</li>
+                                <br>
+                                <a href="{% url 'venue:payment' %}" class="btn btn-primary">
+                                    <div class="d-flex align-items-center">
+                                        <div class="mr-2">
+                                            <i class="bi bi-journal-bookmark"></i>
+                                        </div>
+                                        <div>Book Now</div>
                                     </div>
-                                    <div>Book Now</div>
-                                </div>
-                            </a>
+                                </a>
+                            </ul>
                         </div>
-                    </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -76,32 +240,33 @@
         {% else %}
         {% for venue in list_venue %}
         <div class="col-md-4 mb-3">
-            <div class="card" onclick="toggleDescription(this)" style="cursor:pointer;">
-                <img src="/media/{{ venue.image }}" class="card-img-top rounded-top" alt="{{ venue.name }} Image"
-                    width="400" height="400">
-                <div class="card-body">
-                    <h5 class="card-title">{{ venue.venuename }}</h5>
-                    <ul class="list-unstyled">
-                        <li><strong>Address:</strong> {{ venue.address }}</li>
-                        <li><strong>Price:</strong> {{ venue.price }} (per plates)</li>
-                        <li><strong>Capacity:</strong> {{ venue.capacity }} people</li>
-                        <li><strong>Phone:</strong> {{ venue.phone }}</li>
-                        <div class="description"
-                            style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;">
-                            <li><strong>Description:</strong>
-                                {{ venue.description }}
-                            </li>
-                            <br>
-                            <a href="{% url 'venue:payment' %}" class="btn btn-primary">
-                                <div class="d-flex align-items-center">
-                                    <div class="mr-2">
-                                        <i class="bi bi-journal-bookmark"></i>
+            <div class="card" onclick="toggleDescription(this)">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="/media/{{ venue.image }}" class="card-img-top rounded-top"
+                            alt="{{ venue.name }} Image" style="height: 400px;">
+                    </div>
+                    <div class="card-back">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ venue.venuename }}</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>Address:</strong> {{ venue.address }}</li>
+                                <li><strong>Price:</strong> {{ venue.price }} (per plates)</li>
+                                <li><strong>Capacity:</strong> {{ venue.capacity }} people</li>
+                                <li><strong>Phone:</strong> {{ venue.phone }}</li>
+                                <li><strong>Description:</strong> {{ venue.description }}</li>
+                                <br>
+                                <a href="{% url 'venue:partData' venue.id %}" class="btn btn-primary">
+                                    <div class="d-flex align-items-center">
+                                        <div class="mr-2">
+                                            <i class="bi bi-journal-bookmark"></i>
+                                        </div>
+                                        <div>Book Now</div>
                                     </div>
-                                    <div>Book Now</div>
-                                </div>
-                            </a>
+                                </a>
+                            </ul>
                         </div>
-                    </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -109,21 +274,61 @@
         {% endif %}
     </div>
 </div>
+
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4tMhMVQdzmxU8cJc0ZVja6py8tY1OMCc&libraries=places"></script>
+<script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4tMhMVQdzmxU8cJc0ZVja6py8tY1OMCc&libraries=places"></script>
+
 <script>
     function toggleDescription(card) {
-        const descriptionDiv = card.querySelector('.description');
-        const maxHeight = descriptionDiv.scrollHeight;
-        descriptionDiv.style.maxHeight = descriptionDiv.style.maxHeight === '0px' ? maxHeight + 'px' : '0px';
-
-        // Scroll towards the description 50% of the way
-        const halfwayPoint = window.innerHeight / 2;
-        descriptionDiv.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
-
-        // Alternatively, you can scroll to a specific offset if you want more control
-        window.scrollBy(0, halfwayPoint);
+        card.classList.toggle('flipped');
     }
+
+    var carouselWidth = $(".carousel-inner")[0].scrollWidth;
+    var cardWidth = $(".carousel-item").width();
+    var scrollPosition = 0;
+
+    $(".carousel-control-next").on("click", function () {
+        if (scrollPosition < (carouselWidth - cardWidth * 4)) { //check if you can go any further
+            scrollPosition += cardWidth * 3;  //update scroll position
+            $(".carousel-inner").animate({ scrollLeft: scrollPosition }, 600); //scroll left
+        }
+    });
+
+    $(".carousel-control-prev").on("click", function () {
+        if (scrollPosition > 0) {
+            scrollPosition -= cardWidth * 3;
+            $(".carousel-inner").animate(
+                { scrollLeft: scrollPosition },
+                600
+            );
+        }
+    });
+
+    var multipleCardCarousel = document.querySelector(
+        "#carouselExampleControls"
+    );
+    if (window.matchMedia("(min-width: 768px)").matches) {
+        //rest of the code
+        var carousel = new bootstrap.Carousel(multipleCardCarousel, {
+            interval: false
+        });
+    } else {
+        $(multipleCardCarousel).addClass("slide");
+    }
+
+    // fnction toggleDescription(card) {
+    //     const descriptionDiv = card.querySelector('.description');
+    //     const maxHeight = descriptionDiv.scrollHeight;
+    //     descriptionDiv.style.maxHeight = descriptionDiv.style.maxHeight === '0px' ? maxHeight + 'px' : '0px';
+
+    //     // Scroll towards the description 50% of the way
+    //     const halfwayPoint = window.innerHeight / 2;
+    //     descriptionDiv.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+
+    //     // Alternatively, you can scroll to a specific offset if you want more control
+    //     window.scrollBy(0, halfwayPoint);
+    // }
 
     // This example requires the Places library. Include the libraries=places
     // parameter when you first load the API. For example:
@@ -238,4 +443,8 @@
 
     window.initMap = initMap;
 </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 {% endblock %}

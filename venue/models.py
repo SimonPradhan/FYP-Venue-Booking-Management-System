@@ -1,6 +1,5 @@
 from django.db import models
 from user.models import UserCustomer, UserVendor
-# Create your models here.
 
 class Venue(models.Model):
     vendor_id = models.ForeignKey(UserVendor, on_delete=models.CASCADE)

@@ -1,0 +1,45 @@
+{% load static %}
+<!-- Navbar -->
+<nav class="navbar navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand font-lobster" href="{% url 'venue:home' %}">
+            <h4 class="logo ml-1 p-0">EaseEvent</h4>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        {% if request.user.is_superuser %}
+                            <a href="{% url 'admin:logout' %}" class="nav-link text-body font-weight-bold px-0">
+                        {% else %}
+                            <a href="{% url 'logout' %}" class="nav-link text-body font-weight-bold px-0">
+                        {% endif %}
+                            <i class="fa fa-user me-sm-1"></i>
+                            <span class="d-sm-inline d-none me-3">Logout</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a href="{% url 'login' %}" class="nav-link text-body font-weight-bold px-0">
+                            <i class="fa fa-user me-sm-1"></i>
+                            <span class="d-sm-inline d-none me-3">Sign In</span>
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    {% if request.user.is_superuser %}
+                        <a href="{% url 'admin:password_change' %}" class="nav-link text-body font-weight-bold px-0">
+                    {% else %}
+                        <a href="{% url 'password_change' %}" class="nav-link text-body font-weight-bold px-0">
+                    {% endif %}
+                        <span class="d-sm-inline d-none me-3">Change Password</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- End Navbar -->

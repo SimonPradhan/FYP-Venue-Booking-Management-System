@@ -1,0 +1,104 @@
+<!-- profile.html -->
+{% extends 'vendor.html' %}
+{% block title %}Profile{% endblock%}
+{% block content %}
+<div class="container bg-dark p-3 shadow p-3 mb-5 bg-body-tertiary rounded">
+  <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{%url 'vendor:vendor'%}">Dashboard</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Profile</li>
+    </ol>
+  </nav>
+  <!-- <h2 class ="text-center text-dark">Profile</h2> -->
+  <div class="d-flex align-items-center justify-content-center">
+    <!-- Display user's profile picture -->
+    <img src="{{ profile.dp_img.url }}" alt="Profile Picture" style="height: 128px; width: 128px; border-radius: 100%;">
+    <!-- Edit icon -->
+    <label for="profile_picture" class="position-absolute" style=" margin-top: 5.6rem;">
+      <i class="bi bi-pencil-square btn btn-secondary" data-bs-toggle="modal" data-bs-target="#profilePictureModal"></i>
+    </label>
+
+
+  </div>
+  <div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+      <h3>Update Profile</h3>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="bio" class="form-label">Bio:</label>
+          <textarea class="form-control" id="bio" name="bio">{{ profile.name }}</textarea>
+        </div>
+        <div class="mb-3">
+          <label for="name" class="form-label">Name</label>
+          <input class="form-control" type="text" id="name" name="name" value="{{profile.name}}">
+        </div>
+        <div class="mb-3">
+          <label for="username">Username</label>
+          <input type="text" class="form-control" name="username" value="{{profile.username}}">
+        </div>
+        <div class="mb-3">
+          <label for="address">Address</label>
+          <input type="text" class="form-control" name="address" value="{{profile.address}}">
+        </div>
+        <div class="mb-3">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" name="email" value="{{profile.email}}">
+        </div>
+        <div class="mb-3">
+          <label for="phone">Mobile Number</label>
+          <input type="tel" class="form-control" pattern="[0-9]{10}" name="phone" value="{{profile.phone}}">
+        </div>
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+      </form>
+    </div>
+    <!-- change password -->
+    <div class="col-md-6">
+      <h3>Change Password</h3>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="old_password" class="form-label">Old Password</label>
+          <input type="password" class="form-control" name="old_password" required>
+        </div>
+        <div class="mb-3">
+          <label for="new_password" class="form-label">New Password</label>
+          <input type="password" class="form-control" name="new_password" required>
+        </div>
+        <div class="mb-3">
+          <label for="confirm_password" class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" name="confirm_password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Change Password</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- updating profile -->
+<div class="modal fade mt-5" id="profilePictureModal" tabindex="-1" aria-labelledby="profilePictureModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="profilePictureModalLabel">Edit Profile Picture</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="{%url 'user:update_profile_pic'%}" id="profilePictureForm" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="profile_picture_input" class="form-label">Choose Profile Picture</label>
+            <input type="file" class="form-control" id="profile_picture_input" accept="images/*" name="profile_picture">
+          </div>
+          <button type="submit" class="btn btn-primary save-button">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+</script>
+{% endblock %}

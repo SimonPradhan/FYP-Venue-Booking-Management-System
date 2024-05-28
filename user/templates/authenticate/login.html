@@ -1,17 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% if messages %}
-  {% for message in messages %}
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-  {% endfor %}
-{% endif %}
-
 {% block content %}
 <div class="container mt-5 mb-5 rounded">
   <div class="row justify-content-center">
@@ -19,7 +8,7 @@
       <div class="card">
         <div class="row g-0">
           <div class="col-md-6">
-            <img src="{% static 'images/bgLogin.png' %}" class="img-fluid rounded-start" alt="...">
+            <img src="{% static 'images/bgLogin.png' %}" class="img-fluid rounded-start h-100" alt="...">
           </div>
           <div class="col-md-6">
             <div class="card-body">
@@ -28,7 +17,7 @@
                 <a href="#" class="btn btn-primary btn-sm customer-login active" style="width:49%;">Customer Login</a>
                 <a href="#" class="btn btn-primary btn-sm vendor-login" style="width:49%;">Vendor Login</a>
               </div>
-              <form method="POST" action="" id="login-form">
+              <form method="POST" action="{% url 'user:login' %}" id="login-form">
                 {% csrf_token %}
                 <div class="mb-3">
                   <label for="username" class="form-label">Username:</label>
@@ -38,7 +27,7 @@
                   <label for="password" class="form-label">Password:</label>
                   <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Login</button>
+                <button type="submit" class="btn btn-primary btn-block w-100">Login</button>
                 <div class="mt-3">
                   <a href="{% url 'user:forgetpassword' %}">Forget Password?</a>
                 </div>

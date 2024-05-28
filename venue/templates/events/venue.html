@@ -2,22 +2,36 @@
 {% load static %}
 {% block content %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.9.0/main.min.css" rel="stylesheet">
 <style>
-    /* Additional CSS styles for responsiveness */
+   
     @media (max-width: 768px) {
-        /* Adjust styles for smaller screens */
-        .img-fluid {
-            max-width: 100%;
-            height: auto;
-        }
-        .p-3 {
-            padding: 1rem !important;
-        }
+       
+        .container {
+        padding: 10px; 
+    }
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+    }
+    .p-3 {
+        padding: 1rem !important;
+    }
+    .buttons {
+        display: flex;
+        flex-direction: column;
+    }
+    .book-now-btn {
+        margin-top: 10px; 
+    }
+    #calendar,
+    #google-map {
+        height: 300px;  
+    }
     }
 </style>
 
-<div class="container">
+<div class="container bg-light rounded shadow-lg mt-4 mb-4">
     <a href="{% url 'venue:explore' %}" class="btn btn-primary mt-3 ml-3 mb-3">
         <i class="bi bi-arrow-left"></i> Back to Explore
     </a>
@@ -27,7 +41,7 @@
         </div>
         <div class="col-md-6">
             <div class="p-3">
-                <h2>{{ venue.venuename }}</h2>
+                <h2 style="font-weight: bold; font-size: 32px; color: #000;">{{ venue.venuename }}</h2>
                 <ul class="list-unstyled">
                     <li><strong>Address:</strong> {{ venue.address }}</li>
                     <li><strong>Price:</strong> {{ venue.price }} (per plate)</li>
@@ -41,12 +55,12 @@
             </div>
             <div class="buttons p-4">
                 <!-- chat now button -->
-                <a href="{% url 'chats:chat' %}" class="btn btn-primary">
-                    <div class="row align-items-center">
+                <a href= "{% url 'chats:chat' %}?venue_id={{ request.session.venue_id }}&user_id={{ request.session.user_id }}" class="btn btn-primary" id="chatbutton">
+                    <div class="row align-items-center justify-content-center">
                         <div class="col-2">
                             <i class="bi bi-chat-dots"></i>
                         </div>
-                        <div class="col-2">Chat Now</div>
+                        <div class="col-3">Chat Now</div>
                     </div>
                 </a>
                 <!-- book now button  -->
@@ -55,7 +69,7 @@
                         <div class="col-2">
                             <i class="bi bi-journal-bookmark"></i>
                         </div>
-                        <div class="col-2">Book Now</div>
+                        <div class="col-3">Book Now</div>
                     </div>
                 </button>
             </div>
@@ -84,7 +98,7 @@
                         class="bi bi-x"></i></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{% url 'venue:booking' %}">
+                <form method="POST" >
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="eventName">Event Name:</label>
@@ -142,9 +156,9 @@
                         <h4>Cost: $</h4>
                     </div>
 
-                    <button type="submit" value="Book"   class="btn btn-primary bookNowButton" id="bookNowButton">Book Now</button>
+                        <button type="submit" value="Book"  class="btn btn-primary payment-button" id="payment-button">Pay via Khalti</button>
 
-                </form>
+                    </form>
 
                
             </div>
@@ -154,11 +168,13 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/fullcalendar.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.9.0/main.min.js"></script>
+<!-- <script src = "{%static 'index.js'%}"></script> -->
+<script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
+    
     // Function to update the total cost based on the number of guests
     function updateTotalCost() {
         // Get the number of guests input field
@@ -179,28 +195,143 @@
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth', // Display mode: Month view
-            events: [
-                // Example events
-                {
-                    title: 'Event 1',
-                    start: '2024-04-01', // Event start date
-                    end: '2024-04-02' // Event end date
-                },
-                {
-                    title: 'Event 2',
-                    start: '2024-04-05', // Event start date
-                    end: '2024-04-07' // Event end date
-                }
-                // Add more events as needed
-            ]
-        });
-        calendar.render();
-    });
+    // function saveBookingDetails() {
+    //     // Get the form input values
+    //     var eventName = document.getElementById('eventName').value;
+    //     var eventType = document.getElementById('event').value;
+    //     var date = document.getElementById('date').value;
+    //     var time = document.getElementById('time').value;
+    //     var guests = document.getElementById('guests').value;
+    //     var message = document.getElementById('message').value;
+    //     var cost = document.getElementById('cost').textContent.trim().split(':')[1].trim();
+
+    //     // Create an object to store booking details
+    //     var bookingData = {
+    //         'eventName': eventName,
+    //         'eventType': eventType,
+    //         'date': date,
+    //         'time': time,
+    //         'guests': guests,
+    //         'message': message,
+    //         'cost': cost
+    //     };
+
+    //     // Save booking data to local storage
+    //     localStorage.setItem('bookingData', JSON.stringify(bookingData));
+    // }
+
+
+    // // Add an event listener to the "Book Now" button
+    // document.getElementById('bookNowButton').addEventListener('click', function() {
+    //     // Call the function to save booking details in local storage
+    //     saveBookingDetails();
+
+    //     // Redirect to the payment page
+        
+    // });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var calendarEl = document.getElementById('calendar');
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth', // Display month view initially
+    selectable: true, // Allow date selection
+    events: [
+      // Add booked dates here as events
+      { 
+        title: 'Booked', 
+        start: '2024-05-10', // Example booked date
+        allDay: true 
+      },
+      // Add more booked dates as needed
+    ],
+    select: function(info) {
+      // Handle date selection if needed
+    }
+  });
+  calendar.render();
+});
+  
+</script>
+
+
+<script>
+    function booking(){
+        var eventName = document.getElementById('eventName').value;
+        var eventType = document.getElementById('event').value;
+        var date = document.getElementById('date').value;
+        var time = document.getElementById('time').value;
+        var guests = document.getElementById('guests').value;
+        var message = document.getElementById('message').value;
+        var cost = document.getElementById('cost').textContent.trim().split(':')[1].trim();
+        var bookingData = {
+            'eventName': eventName,
+            'eventType': eventType,
+            'date': date,
+            'time': time,
+            'guests': guests,
+            'message': message,
+            'cost': cost
+        };
+        console.log(bookingData);
+        console.log("Works")
+}
+var config = {
+        "publicKey": "test_public_key_47efbc9b82e848fcbd2579c01cdb3c73",
+        "productIdentity": "1234567890",
+        "productName": "Dragon",
+        "productUrl": "http://gameofthrones.wikia.com/wiki/Dragons",
+        "paymentPreference": [
+            "KHALTI",
+            "EBANKING",
+            "MOBILE_BANKING",
+            "CONNECT_IPS",
+            "SCT",
+        ],
+        "eventHandler": {
+            onSuccess(payload) {
+                console.log("Works")
+                fetch("{% url 'payments:khalti' %}", {
+                        method: 'post',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("anshy gay");
+                        console.log(data.details);
+                        if (data.status === "success") {
+                            // Optionally, you can redirect or show a success message
+                            window.location.href = "{% url 'venue:home' %}";
+                        } else {
+                            // Handle the error
+                            alert("Payment failed!");
+                        }
+                    });
+            },
+            onError(error) {
+                console.error(error);
+            },
+            onClose() {
+                console.log('widget is closing');
+            }
+        }
+    };
+
+    var checkout = new KhaltiCheckout(config);
+    var btn = document.getElementById("payment-button");
+    btn.onclick = function (e) {
+        e.preventDefault();
+        // Validate the form here if needed
+        // minimum transaction amount must be 10, i.e 1000 in paisa.
+        checkout.show({ amount: 1000 });
+}
+</script>
+
+<!-- AIzaSyB4tMhMVQdzmxU8cJc0ZVja6py8tY1OMCc -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4tMhMVQdzmxU8cJc0ZVja6py8tY1OMCc&callback=initMap" async defer></script>
 
 <script defer >
    
@@ -208,20 +339,7 @@
     document.getElementById("date").addEventListener("change", function() {
    
     const chosenDate = new Date(this.value);
- 
-    // console.log(chosenDate);
-    if (chosenDate >= new Date()) {
-        document.getElementById("bookNowButton").disabled = false;
-    } else {
-        document.getElementById("bookNowButton").disabled = true;
-    }
-    const bookingData = {{ booking_data|safe }};
    
-    var bookingsForSelectedDate,timesForSelectedDate = [];
-    console.log(bookingsForSelectedDate)
-    // Get the select element
-    var selectElement = document.getElementById('time');
-    
     // Get the selected date
     var selectedDate = document.getElementById('date').value;
     
@@ -246,38 +364,65 @@
 
 // Define the coordinates of the desired location
 // Define the name of the place you want to search
-var placeName = "{{venue.address}}"; // Example place name
+// var placeName = "{{venue.address}}"; // Example place name
 
-// Make a request to the Nominatim API to search for the place name
-fetch('https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(placeName) + '&format=json')
-  .then(response => response.json())
-  .then(data => {
-    // Check if the response contains any results
-    if (data && data.length > 0) {
-      // Extract the latitude and longitude from the first result
-      var latitude = data[0].lat;
-      var longitude = data[0].lon;
+// // Make a request to the Nominatim API to search for the place name
+// fetch('https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(placeName) + '&format=json')
+//   .then(response => response.json())
+//   .then(data => {
+//     // Check if the response contains any results
+//     if (data && data.length > 0) {
+//       // Extract the latitude and longitude from the first result
+//       var latitude = data[0].lat;
+//       var longitude = data[0].lon;
       
-      // Initialize the map with the view set to the desired location
-      var map = L.map('map').setView([latitude, longitude], 18); // Set initial coordinates and zoom level
+//       // Initialize the map with the view set to the desired location
+//       var map = L.map('map').setView([latitude, longitude], 18); // Set initial coordinates and zoom level
 
-      // Add a tile layer (OpenStreetMap tile layer)
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-          maxZoom: 100
-      }).addTo(map);
-    } else {
-      console.log("No results found for the place name:", placeName);
+//       // Add a tile layer (OpenStreetMap tile layer)
+//       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+//           attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+//           maxZoom: 100
+//       }).addTo(map);
+//     } else {
+//       console.log("No results found for the place name:", placeName);
+//     }
+//   })
+//   .catch(error => {
+//     console.error("Error fetching data from the Nominatim API:", error);
+//   });
+
+function initMap() {
+        // Define the coordinates of the desired location
+        var placeName = "{{ venue.address }}"; // Example place name
+
+        // Make a request to the Geocoding API to get the coordinates for the place name
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'address': placeName }, function(results, status) {
+            if (status === 'OK') {
+                // Get the latitude and longitude from the first result
+                var location = results[0].geometry.location;
+                
+                // Initialize the map with the view set to the desired location
+                var map = new google.maps.Map(document.getElementById('google-map'), {
+                    center: location,
+                    zoom: 18 // Set initial zoom level
+                });
+
+                // Add a marker at the location
+                var marker = new google.maps.Marker({
+                    position: location,
+                    map: map,
+                    title: "{{ venue.venuename }}" // Example venue name
+                });
+            } else {
+                console.error('Geocode was not successful for the following reason: ' + status);
+            }
+        });
     }
-  })
-  .catch(error => {
-    console.error("Error fetching data from the Nominatim API:", error);
-  });
-
-    // List of values to disable
-    
-    // document.getElementById("bookNowButton").addEventListener("click", targetVenuebooking());    
 </script>
+
+  
 
 
 {% endblock %}

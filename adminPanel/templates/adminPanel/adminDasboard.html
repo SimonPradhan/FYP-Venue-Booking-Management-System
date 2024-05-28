@@ -49,19 +49,19 @@
     let chart = new Chart(ctx, {
         type: "bar",
         data: {
-            labels: ["2020/Q1", "2020/Q2", "2020/Q3", "2020/Q4"],
+            labels: ["Vendors", "Customers","Bookings"],
             datasets: [
                 {
-                    label: "Gross volume ($)",
+                    label: "Size",
                     backgroundColor: "#79AEC8",
                     borderColor: "#417690",
-                    data: [100, 100, 100, 100]
+                    data: [{{totalVendor}}, {{totalCust}}, {{totalbooking}}]
                 }
             ]
         },
         options: {
             title: {
-                text: "Gross Volume in 2020",
+                text: "Analysis",
                 display: true
             }
         }

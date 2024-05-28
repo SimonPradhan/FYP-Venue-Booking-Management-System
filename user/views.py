@@ -11,49 +11,26 @@ from datetime import datetime
 from django.core.mail import send_mail
 from django.conf import settings
 
-# def login_user(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email')
-#         password = request.POST.get('password') 
-
-#         if UserCustomer.objects.filter(email=email).exists():
-#             username = UserCustomer.objects.get(email=email).username
-#             user = authenticate(request, username=username, password=password)
-#         else:
-#             messages.info(request, 'Username OR password is incorrect')
-#             return redirect('user:login')
-        
-#         if user is not None:
-#             login(request, user)
-#             return redirect('venue:home')
-#         else:
-#             messages.error(request, 'Username OR password is incorrect')
-#             return redirect('user:login')
-
-#     return render(request, 'authenticate/login.html')
-
 @csrf_exempt
 def login_user(request):
-  # Initialize username with a default value
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password') 
-        if UserCustomer.objects.filter(username=username):
+        if UserCustomer.objects.filter(username=username).exists():
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
                 request.session['email'] = UserCustomer.objects.get(username=username).email
                 request.session['user_id'] = UserCustomer.objects.get(username=username).id
-                print(request.session.get('user_id'))
                 messages.success(request, 'You have been logged in!')
                 return redirect('venue:home')
             else:
-                messages.error(request, 'Error logging in - please try again...')
+                messages.warning(request, 'Invalid username or password')
         else:
-            messages.error(request, 'Error logging in - User does not exist.')
+            messages.error(request, 'User does not exist.')
         
-    # Assign username to the context outside of the conditional block
-    
+        return redirect('user:login')  # Redirect back to the login page to display messages
+
     return render(request, 'authenticate/login.html')
 
 
@@ -96,17 +73,22 @@ def login_vendor(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password') 
-        if UserVendor.objects.filter(username=username):
+        if UserVendor.objects.filter(username=username).exists():
             user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            request.session['email'] = UserVendor.objects.get(username=username).email
-            request.session['vendor_id'] = UserVendor.objects.get(username=username).id
-            messages.success(request,('You have been logged in!'))
-            return redirect('vendor:vendor')
+            if user is not None:
+                login(request, user)
+                request.session['email'] = UserVendor.objects.get(username=username).email
+                request.session['vendor_id'] = UserVendor.objects.get(username=username).id
+                messages.success(request, 'You have been logged in!')
+                return redirect('vendor:vendor')
+            else:
+                messages.error(request, 'Invalid username or password')
         else:
-            messages.success(request,('Error logging in - please try again...'))
-    return render(request, 'authenticate/login.html' )
+            messages.error(request, 'User does not exist.')
+
+        return redirect('user:login')  # Redirect back to the login page to display messages
+
+    return render(request, 'authenticate/login.html')
 
 
 def signup_vendor(request):
@@ -139,7 +121,7 @@ def signup_vendor(request):
             ) 
             vendorData.save()
             messages.success(request,('Account created successfully!'))
-            return redirect('vendor:vendor')
+            return redirect('user:login')
         
     return render(request, 'authenticate/signup.html', {'is_customer_signup': False})
 
@@ -235,5 +217,49 @@ def profile(request):
     context = {
         'profile': UserCustomer.objects.get(id = request.session.get('user_id'))
     }
-    
     return render(request, 'profile.html', context)
+
+def vendorProfile(request):
+    print(request.session.get('vendor_id'))
+    context = {
+        'profile': UserVendor.objects.get(id = request.session.get('vendor_id'))
+    }
+    return render(request, 'vendorProfile.html', context)
+
+def updateProfile(request):
+    user = UserCustomer.objects.get(id = request.session.get('user_id'))
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        address = request.POST.get('address')
+        new_password = request.POST.get('password')
+        current_password = request.POST.get('current_password')
+
+    if User.password == current_password:
+        user.username = username
+        user.name = name
+        user.email = email
+        user.phone = phone
+        user.address = address
+        user.password = new_password
+        user.save()
+
+        User.objects.filter(email=user.email).update(username=username,email = email, password=new_password)
+
+        messages.success(request, 'Profile updated successfully!')
+        return redirect('user:profile')
+    return render(request, 'profile.html', {'profile': user})
+
+@login_required
+@csrf_exempt
+def update_profile_picture(request):
+    if request.method == 'POST' and request.FILES.get('profile_picture'):
+        user_id = request.session.get('user_id')
+        profile = UserCustomer.objects.get(id=user_id)
+        profile.dp_img = request.FILES.get('profile_picture')
+        profile.save()
+        messages.success(request, 'Profile picture updated successfully!')
+        return redirect('user:profile')
+    return render(request, 'profile.html', {'profile': profile})

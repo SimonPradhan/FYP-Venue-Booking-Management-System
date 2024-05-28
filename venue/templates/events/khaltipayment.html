@@ -3,12 +3,9 @@
 
 {% block content %}
 <html>
-
 <head>
     <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
-
 </head>
-
 <body>
     <div class="d-flex justify-content-center align-items-center">
         <h2 class="font-montserrat">Payment Method</h2>
@@ -16,11 +13,10 @@
     {% if request.user.is_authenticated %}
     <span class="d-block p-5 bg-grey">
         <div class="container d-flex justify-content-center">
-            <button class="btn btn-primary" id="payment-button" onclick="">Pay with Khalti</button>
+            <button class="btn btn-primary" id="payment-button">Pay with Khalti</button>
         </div>
     </span>
-    {% endif %}
-    {% if not request.user.is_authenticated %}
+    {% else %}
     <span class="d-block p-5 bg-grey">
         <div class="container d-flex justify-content-center">
             <a href="{% url 'user:login' %}" class="btn btn-primary">Login to Book</a>
@@ -31,51 +27,61 @@
     <!-- Place this where you need payment button -->
     <!-- Paste this code anywhere in your body tag -->
     <script>
-        var config = {
-            // replace the publicKey with yours
-            "publicKey": "test_public_key_47efbc9b82e848fcbd2579c01cdb3c73",
-            "productIdentity": "1234567890",
-            "productName": "Dragon",
-            "productUrl": "http://gameofthrones.wikia.com/wiki/Dragons",
-            "paymentPreference": [
-                "KHALTI",
-                "EBANKING",
-                "MOBILE_BANKING",
-                "CONNECT_IPS",
-                "SCT",
-            ],
-            "eventHandler": {
-                onSuccess(payload) {
-                    console.log(payload);
-                    fetch("{% url 'payments:khalti' %}", {
-                        method: 'post',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(payload)
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data);
-                            if (data.status) {
-                                // Redirect to another page after successful payment
-                                window.location.href = "{% url 'venue:home' %}";
-                            }
-                        })
+       var config = {
+    // replace the publicKey with yours
+    "publicKey": "test_public_key_47efbc9b82e848fcbd2579c01cdb3c73",
+    "productIdentity": "1234567890",
+    "productName": "Dragon",
+    "productUrl": "http://gameofthrones.wikia.com/wiki/Dragons",
+    "paymentPreference": [
+        "KHALTI",
+        "EBANKING",
+        "MOBILE_BANKING",
+        "CONNECT_IPS",
+        "SCT",
+    ],
+    "eventHandler": {
+        onSuccess(payload) {
+            console.log(payload);
+            fetch("{% url 'payments:khalti' %}", {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
                 },
-                // your other event handlers here
-            }
-        };
-
-        var checkout = new KhaltiCheckout(config);
-        var btn = document.getElementById("payment-button");
-        btn.onclick = function () {
-            // minimum transaction amount must be 10, i.e 1000 in paisa.
-            checkout.show({ amount: 1000 });
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.status === "success") {
+                    // Optionally, you can redirect or show a success message
+                    window.location.href = "{% url 'venue:home' %}";
+                } else {
+                    console.error('Payment failed:', data);
+                    alert("Payment failed!"+ data);
+                }
+            })
+            .catch(error => {
+                console.error('Error during fetch:', error);
+                alert("An error occurred during payment processing. Please try again.");
+            });
+        },
+        onError(error) {
+            console.error('Error:', error);
+        },
+        onClose() {
+            console.log('widget is closing');
         }
-    </script>
-    <!-- Paste this code anywhere in your body tag -->
-</body>
+    }
+};
 
+var checkout = new KhaltiCheckout(config);
+var btn = document.getElementById("payment-button");
+btn.onclick = function () {
+    // minimum transaction amount must be 10, i.e 1000 in paisa.
+    checkout.show({ amount: 1000 });
+}
+    </script>
+</body>
 </html>
 {% endblock %}

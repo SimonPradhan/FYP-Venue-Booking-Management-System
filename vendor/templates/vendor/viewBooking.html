@@ -5,7 +5,7 @@
 <!-- <link href="{% static 'css/dashboard.css' %}" rel="stylesheet"> -->
 <link href="{% static 'css/vendor.css' %}" rel="stylesheet">
 
-<div class="container-fluid">
+<div class="container-fluid bg-light shadow-lg rounded">
     <div class="row">
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
@@ -34,6 +34,7 @@
               <th>Date</th>
               <th>Time</th>
               <th>Event Type</th>
+              <th>Event Name</th>
             </tr>
           </thead>
           <tbody>
@@ -44,6 +45,7 @@
               <td>{{ booking.date }}</td>
               <td>{{ booking.time }}</td>
               <td>{{ booking.eventType }}</td>
+              <td>{{ booking.eventName }}</td>
             </tr>
             {% endfor %}
           </tbody>

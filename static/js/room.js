@@ -1,12 +1,16 @@
+// chat/static/room.js
+
 console.log("Sanity check from room.js.");
 
 const roomName = JSON.parse(document.getElementById('roomName').textContent);
 
 let chatLog = document.querySelector("#chatLog");
 let chatMessageInput = document.querySelector("#chatMessageInput");
-let chatMessageSend = document.querySelector("#chatMessageSend");
+const chatMessageSend = document.getElementById("sendchat");
 let onlineUsersSelector = document.querySelector("#onlineUsersSelector");
-
+// chatMessageSend.onclick = function() {
+//     print("hi");
+// }
 // adds a new option to 'onlineUsersSelector'
 function onlineUsersSelectorAdd(value) {
     if (document.querySelector("option[value='" + value + "']")) return;
@@ -28,23 +32,33 @@ chatMessageInput.focus();
 // submit if the user presses the enter key
 chatMessageInput.onkeyup = function(e) {
     if (e.keyCode === 13) {  // enter key
+        console.log("chatMessageInput.value.length: " + chatMessageInput.value.length);
         chatMessageSend.click();
     }
 };
 
 // clear the 'chatMessageInput' and forward the message
 chatMessageSend.onclick = function() {
+    console.log("chatMessageInput.value.length: " + chatMessageInput.value);
+
     if (chatMessageInput.value.length === 0) return;
-    chatSocket.send(JSON.stringify({
-        "message": chatMessageInput.value,
-    }));
+    // TODO: forward the message to the WebSocket
+    console.log("Sending message...");
+    console.log(chatSocket);
+    // chatSocket.send(JSON.stringify({
+    //     "message": chatMessageInput.value,
+    // }));
+    if (chatSocket.readyState === WebSocket.OPEN) {
+        // Send the message
+        chatSocket.send(JSON.stringify({
+            "message":  chatMessageInput.value
+        }));
+    } else {
+        console.error('WebSocket connection is not open');
+    }
     chatMessageInput.value = "";
 };  
 
-/*
-connecting with websocket
----------------------------
-*/
 let chatSocket = null;
 
 function connect() {
@@ -63,28 +77,13 @@ function connect() {
     };
 
     chatSocket.onmessage = function(e) {
+        print("Listennig");
         const data = JSON.parse(e.data);
-        console.log(data);
-    
+        console.log(" data: " + data.message);      
+
         switch (data.type) {
             case "chat_message":
-                chatLog.value += data.user + ": " + data.message + "\n";  // new
-                break;
-            default:
-                console.error("Unknown message type!");
-                break;
-            case "user_list":
-                for (let i = 0; i < data.users.length; i++) {
-                    onlineUsersSelectorAdd(data.users[i]);
-                }
-                break;
-            case "user_join":
-                chatLog.value += data.user + " joined the room.\n";
-                onlineUsersSelectorAdd(data.user);
-                break;
-            case "user_leave":  
-                chatLog.value += data.user + " left the room.\n";
-                onlineUsersSelectorRemove(data.user);
+                chatLog.value += data.user + ": " +  data.message + "\n";
                 break;
             case "private_message":
                 chatLog.value += "PM from " + data.user + ": " + data.message + "\n";
@@ -92,22 +91,25 @@ function connect() {
             case "private_message_delivered":
                 chatLog.value += "PM to " + data.target + ": " + data.message + "\n";
                 break;
+            default:
+                console.error("Unknown message type!");
+                break;
         }
-    
+
         // scroll 'chatLog' to the bottom
         chatLog.scrollTop = chatLog.scrollHeight;
     };
 
-    onlineUsersSelector.onchange = function() {
-        chatMessageInput.value = "/pm " + onlineUsersSelector.value + " ";
-        onlineUsersSelector.value = null;
-        chatMessageInput.focus();
-    };
-
     chatSocket.onerror = function(err) {
-        console.log("WebSocket encountered an error: " + err.message);
+        console.log("WebSocket encountered an error: " + err);
         console.log("Closing the socket.");
         chatSocket.close();
     }
 }
 connect();
+
+onlineUsersSelector.onchange = function() {
+    chatMessageInput.value = "/pm " + onlineUsersSelector.value + " ";
+    onlineUsersSelector.value = null;
+    chatMessageInput.focus();
+};

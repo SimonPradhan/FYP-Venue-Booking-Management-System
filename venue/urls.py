@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, contactus, payment, explore, partData, booking, gallery
+from .views import home, contactus, payment, explore, partData, gallery, booking
 
 app_name = 'venue'
 urlpatterns = [

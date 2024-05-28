@@ -1,101 +1,79 @@
 import json
-from asgiref.sync import async_to_sync
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer,WebsocketConsumer
 from .models import Room, Message
-
+from channels.db import database_sync_to_async
+from asgiref.sync import async_to_sync
 
 class ChatConsumer(WebsocketConsumer):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.room_name = None
-        self.room_group_name = None
-        self.room = None
-        self.user = None
-        self.user_inbox = None
-
+    # @database_sync_to_async
+    # def get_room(self):
+    #     try:
+    #         return Room.objects.get(name=self.room_name)
+    #     except Room.DoesNotExist:
+    #         return None
+        
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = f'chat_{self.room_name}'
         self.room = Room.objects.get(name=self.room_name)
+        # self.room = await self.get_room()
         self.user = self.scope['user']
-        self.user_inbox = f'inbox_{self.user.username}'
+        self.user_inbox = f'{self.user.username}_inbox'
+    
+
+        # # Determine if the user is a vendor or a regular user
+        # if self.user == self.room.user_id:
+        #     self.vendor = self.room.vendor_id
+        # elif self.user == self.room.vendor_id:
+        #     self.vendor = self.room.user_id
+
+        self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name,
+        )
+
+        # Join the user inbox group
+        self.channel_layer.group_add(
+            self.user_inbox,
+            self.channel_name,
+        )
+
+        # Send the user list to the newly joined user
+        self.send_user_list()
+
+        # Notify other users about the user join event
+        self.send_user_join_message()
 
         self.accept()
-
-        async_to_sync(self.channel_layer.group_add)(
-            self.room_group_name,
-            self.channel_name,
-        )
-
-        self.send(json.dumps({
-            'type': 'user_list',
-            'users': [user.username for user in self.room.online.all()],
-        }))
-
-        if self.user.is_authenticated:
-            async_to_sync(self.channel_layer.group_send)(
-                self.room_group_name,
-                {
-                    'type': 'user_join',
-                    'user': self.user.username,
-                }
-            )
-            self.room.online.add(self.user)
-
-            async_to_sync(self.channel_layer.group_add)(
-                self.user_inbox,
-                self.channel_name,
-            )
-
-    def disconnect(self, close_code):
-        async_to_sync(self.channel_layer.group_discard)(
-            self.room_group_name,
-            self.channel_name,
-        )
-        if self.user.is_authenticated:
-            async_to_sync(self.channel_layer.group_send)(
-                self.room_group_name,
-                {
-                    'type': 'user_leave',
-                    'user': self.user.username,
-                }
-            )
-            self.room.online.remove(self.user)
-
-            async_to_sync(self.channel_layer.group_discard)(
-                self.user_inbox,
-                self.channel_name,
-            )
 
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-
+        print(self.room_group_name)
         if not self.user.is_authenticated:
             return
 
-        if message.startswith('/pm '):
-            split = message.split(' ', 2)
-            target = split[1]
-            target_msg = split[2]
+        # if message.startswith('/pm '):
+        #     split = message.split(' ', 2)
+        #     target = split[1]
+        #     target_msg = split[2]
 
-            async_to_sync(self.channel_layer.group_send)(
-                f'inbox_{target}',
-                {
-                    'type': 'private_message',
-                    'user': self.user.username,
-                    'message': target_msg,
-                }
-            )
+        #     async_to_sync(self.channel_layer.group_send)(
+        #         f'inbox_{target}',
+        #         {
+        #             'type': 'private_message',
+        #             'user': self.user.username,
+        #             'message': target_msg,
+        #         }
+        #     )
 
-            self.send(json.dumps({
-                'type': 'private_message_delivered',
-                'target': target,
-                'message': target_msg,
-            }))
-            return
-
+        #     self.send(json.dumps({
+        #         'type': 'private_message_delivered',
+        #         'target': target,
+        #         'message': target_msg,
+        #     }))
+        #     return
+       
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
@@ -106,17 +84,65 @@ class ChatConsumer(WebsocketConsumer):
         )
         Message.objects.create(user=self.user, room=self.room, content=message)
 
-    def chat_message(self, event):
-        self.send(text_data=json.dumps(event))
+        
+    def disconnect(self, close_code):
+        self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name,
+        )
+        self.room.leave(self.user)
+        self.channel_layer.group_discard(
+            self.user_inbox,
+            self.channel_name,
+        )
 
-    def user_join(self, event):
-        self.send(text_data=json.dumps(event))
+        # Notify other users about the user leave event
+        self.send_user_leave_message()
+    
 
-    def user_leave(self, event):
-        self.send(text_data=json.dumps(event))
+        
 
-    def private_message(self, event):
-        self.send(text_data=json.dumps(event))
+    async def chat_message(self, event):
+        message = e['message']
+        await self.send(text_data=json.dumps(event))
 
-    def private_message_delivered(self, event):
-        self.send(text_data=json.dumps(event))
+    async def private_message(self, event):
+        await self.send(text_data=json.dumps(event))
+
+    async def private_message_delivered(self, event):
+        await self.send(text_data=json.dumps(event))
+
+    async def send_user_list(self):
+        active_users = [user.username for user in self.room.online.all()]
+        await self.send(text_data=json.dumps({
+            'type': 'user_list',
+            'users': active_users,
+        }))
+
+    async def send_user_join_message(self):
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'user_join',
+                'user': self.user.username,
+            }
+        )
+
+    async def send_user_leave_message(self):
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'user_leave',
+                'user': self.user.username,
+            }
+        )
+
+    async def user_join(self, event):
+        # Handle the user join event
+        pass  # You can implement the logic here if needed
+
+    async def user_leave(self, event):
+        # Handle the user leave event
+        pass  # You can implement the logic here if needed
+
+

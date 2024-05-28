@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from django.core.mail import send_mail
-
+from venue import views
 @csrf_exempt
 def khalti(request):
     data = json.loads(request.body)
@@ -14,18 +14,21 @@ def khalti(request):
     amount = data.get('amount')
     print(request.body)
     payload = {
+        
         "token":token,
         "amount":amount,
     }
     print(payload)
     headers = {
-        "Authorization": "Key {}".format(settings.KHALTI_SECRET_KEY)
+        "Authorization": "Key {}".format(settings.KHALTI_SECRET_KEY),
+        'Content-Type': 'application/json'
     }
     try:
         response = requests.post(settings.KHALTI_VERIFY_URL,payload,headers=headers)
         if response.status_code == 200 :
             email = request.session.get('email', None)
             invoice(email,amount, data.get('product_name'), data.get('idx'))
+            
             return JsonResponse({
                 'status':True,
                 'details':response.json(),

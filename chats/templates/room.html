@@ -1,4 +1,4 @@
-{% extends 'chatbase.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
@@ -25,29 +25,91 @@
             <h2>django-channels-chat</h2>
             <div class="row">
                 <div class="col-12 col">
-                    <a href="{% url 'chats:chat' %}" class="btn btn-primary">Go Back</a>
+                    <a href="{% url 'venue:partData' venue_id %}" class="btn btn-primary">Go Back</a>
                 </div>
                 <div class="col-12 col-md-8">
                     <div class="mb-2">
                         <label for="chatLog">Room: #{{ room.name }}</label>
+        
                         <textarea class="form-control" id="chatLog" readonly></textarea>
                     </div>
                     <div class="input-group">
                         <input type="text" class="form-control" id="chatMessageInput" placeholder="Enter your chat message">
                         <div class="input-group-append">
-                            <button class="btn btn-success" id="chatMessageSend" type="button">Send</button>
+                            <button class="btn btn-success" id="sendchat"  type="button">Send</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-12 col-md-4">
-                    <label for="onlineUsers">Online users</label>
+                    <label for="onlineUsersSelector">Online users</label>
                     <select multiple class="form-control" id="onlineUsersSelector">
                     </select>
                 </div>
             </div>
             {{ room.name|json_script:"roomName" }}
         </div>
-        <script src="{% static 'js/room.js' %}"></script>
+        <script src="{% static 'js/room.js' %}">
+        </script>
+        <!-- <script>
+            const chatsend = document.getElementById("sendchat");
+            chatsend.onclick = function() {
+                // const chatMessageInput = document.getElementById("chatMessageInput");
+                // const message = chatMessageInput.value;
+                // chatSocket.send(JSON.stringify({
+                //     "type": "chat_message",
+                //     "message": message
+                // }));
+                // chatMessageInput.value = "";
+            };
+            const roomName = JSON.parse(document.getElementById('roomName').textContent);
+            let chatSocket = null;
+
+            function connect() {
+                chatSocket = new WebSocket("ws://" + window.location.host + "/ws/chat/" + roomName + "/");
+
+                chatSocket.onopen = function(e) {
+                    console.log("Successfully connected to the WebSocket.");
+                }
+
+                chatSocket.onclose = function(e) {
+                    console.log("WebSocket connection closed unexpectedly. Trying to reconnect in 2s...");
+                    setTimeout(function() {
+                        console.log("Reconnecting...");
+                        connect();
+                    }, 2000);
+                };
+
+                chatSocket.onmessage = function(e) {
+                    const data = JSON.parse(e.data);
+                    console.log(data);      
+
+                    switch (data.type) {
+                        case "chat_message":
+                            chatLog.value += data.user + ": " +  data.message + "\n";
+                            break;
+                        case "private_message":
+                            chatLog.value += "PM from " + data.user + ": " + data.message + "\n";
+                            break;
+                        case "private_message_delivered":
+                            chatLog.value += "PM to " + data.target + ": " + data.message + "\n";
+                            break;
+                        default:
+                            console.error("Unknown message type!");
+                            break;
+                    }
+
+                    // scroll 'chatLog' to the bottom
+                    chatLog.scrollTop = chatLog.scrollHeight;
+                };
+
+                chatSocket.onerror = function(err) {
+                    console.log("WebSocket encountered an error: " + err);
+                    console.log("Closing the socket.");
+                    chatSocket.close();
+                }
+            }
+            connect();
+        </script> -->
     </body>
 </html>
 {% endblock %}

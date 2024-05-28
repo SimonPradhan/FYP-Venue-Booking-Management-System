@@ -13,7 +13,7 @@
           <li class="nav-item">
             <a class="nav-link active" href="{% url 'vendor:vendor' %}">
               <span data-feather="home"></span>
-              Dashboard <span class="sr-only">(current)</span>
+              Dashboard
             </a>
           </li>
           <li class="nav-item">
@@ -23,9 +23,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="users"></span>
-              Customers
+            <a class="nav-link" href="{% url 'vendor:addVenue' %}">
+              <span data-feather="details"></span>
+              Venue Details
             </a>
           </li>
           <li class="nav-item">
@@ -44,7 +44,7 @@
         </h6>
         <ul class="nav flex-column mb-2">
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{% url 'user:vendorprofile' %}">
               <span data-feather="file-text"></span>
               Profile
             </a>

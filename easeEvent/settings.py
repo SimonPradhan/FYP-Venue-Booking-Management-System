@@ -102,6 +102,27 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         "CLIENT": {
+#            "name": 'easeEvent',
+#            "host": 'mongodb+srv://simonpradhan:simon%.ninja1@cluster0.saebudi.mongodb.net/?retryWrites=true&w=majority',
+#            "username": 'simonpradhan',
+#            "password": 'simon.ninja1',
+#            "authMechanism": "SCRAM-SHA-1",
+#         }, 
+#     }
+# }
+
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("localhost", 6379)],
+#         },
+#     },
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
