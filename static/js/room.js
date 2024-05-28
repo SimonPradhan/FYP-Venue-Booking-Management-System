@@ -8,9 +8,6 @@ let chatLog = document.querySelector("#chatLog");
 let chatMessageInput = document.querySelector("#chatMessageInput");
 const chatMessageSend = document.getElementById("sendchat");
 let onlineUsersSelector = document.querySelector("#onlineUsersSelector");
-// chatMessageSend.onclick = function() {
-//     print("hi");
-// }
 // adds a new option to 'onlineUsersSelector'
 function onlineUsersSelectorAdd(value) {
     if (document.querySelector("option[value='" + value + "']")) return;
@@ -77,19 +74,13 @@ function connect() {
     };
 
     chatSocket.onmessage = function(e) {
-        print("Listennig");
+        console.log("Listennig");
         const data = JSON.parse(e.data);
         console.log(" data: " + data.message);      
 
         switch (data.type) {
             case "chat_message":
                 chatLog.value += data.user + ": " +  data.message + "\n";
-                break;
-            case "private_message":
-                chatLog.value += "PM from " + data.user + ": " + data.message + "\n";
-                break;
-            case "private_message_delivered":
-                chatLog.value += "PM to " + data.target + ": " + data.message + "\n";
                 break;
             default:
                 console.error("Unknown message type!");

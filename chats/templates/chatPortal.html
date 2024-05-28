@@ -1,25 +1,17 @@
-{% extends 'base.html' %}
+{% extends 'vendor.html' %}
 {% load static %}
 {% block title %}Chats{% endblock %}
 {% block content %}
 <div class="container mt-3 p-3">
     <h2 class="text-center mb-4">Chats</h2>
     <div class="row">
-        <div class="col-12 col-md-8 mb-3">
-            <div class="mb-2">
-                <label for="roomInput" class="form-label">Enter a room name to connect to it:</label>
-                <input type="text" class="form-control" id="roomInput" placeholder="Room name">
-                <small id="roomInputHelp" class="form-text text-muted">If the room doesn't exist yet, it will be created for you.</small>
-            </div>
-            <button type="button" id="roomConnect" class="btn btn-success">Connect</button>
-        </div>
-        <div class="col-12 col-md-4">
-            <label for="roomSelect" class="form-label">Active rooms</label>
-            <select multiple class="form-control" id="roomSelect" size="5">
-                {% for room in rooms %}
-                    <option>{{ room }}</option>
+        <div class="col-12">
+            <h3>Active Rooms</h3>
+            <ul>
+                {% for ru in room %}
+                    <li>{{ ru.name }}</li>
                 {% endfor %}
-            </select>
+            </ul>
         </div>
     </div>
 </div>

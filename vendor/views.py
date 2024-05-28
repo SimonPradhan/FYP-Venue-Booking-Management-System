@@ -12,9 +12,11 @@ def vendor(request):
     vendor = UserVendor.objects.get(id = vendor_id)
     print(vendor_id)
     totalbooking = Booking.objects.filter().count()
-    # totalCustomer = Booking.objects.filter(vendor= Venue.venue_id).count()
+    # totalCustomer = Booking.objects.values('username').distinct().count()
+    unique_customers = set(Booking.objects.values_list('username_id', flat=True))
+    totalCustomer = len(unique_customers)
 
-    return render(request,'vendor/dashboard.html', {"vendor":vendor, "totalbooking":totalbooking})
+    return render(request,'vendor/dashboard.html', {"vendor":vendor, "totalbooking":totalbooking, "totalCustomer":totalCustomer})
 
 def details(request):
     return render(request,'vendor/details.html', {"name":"name"})
@@ -66,3 +68,33 @@ def showBookings(request):
     }
     print(context)
     return render(request, 'vendor/viewBooking.html', context)
+
+def showVenue(request):
+    vendor_id = request.session.get('vendor_id')
+    user = UserVendor.objects.get(id=vendor_id)
+    # Retrieve all venues associated with the UserVendor
+    venues = Venue.objects.filter(vendor_id=vendor_id)
+    print(venues, user, vendor_id)
+    context = {
+        'venues': venues,
+        'vendor': user,
+    }
+    print(context)
+    return render(request, 'vendor/venues.html', context)
+
+def updateVenue(request, id):
+    venue = get_object_or_404(Venue, id=id)
+
+    if request.method == 'POST':
+        venue.venuename = request.POST.get('name')
+        venue.capacity = request.POST.get('capacity')
+        venue.price = request.POST.get('price')
+        venue.phone = request.POST.get('phone')
+        venue.address = request.POST.get('address')
+        venue.description = request.POST.get('description')
+        if request.FILES.get('image'):
+            venue.image = request.FILES.get('image')
+        venue.save()
+        return HttpResponseRedirect('/vendor/showVenue/')
+    
+    return render(request, 'vendor/updateVenue.html', {"venue": venue})

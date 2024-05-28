@@ -1,0 +1,96 @@
+{% extends 'vendor.html' %}
+{% load static%}
+{% block content%}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.2s;
+        height: 400px;
+        /* Set a fixed height for the card */
+    }
+
+    .card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .card h1 {
+        font-size: 1.5em;
+        margin: 16px;
+        color: #333;
+    }
+
+    .card .card-body {
+        overflow-y: auto;
+        /* Make the card body scrollable */
+        padding: 16px;
+    }
+
+    .card .price {
+        color: #333;
+        font-size: 1.2em;
+    }
+
+    .card button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        cursor: pointer;
+        text-align: center;
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+        font-size: 1em;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .card button:hover {
+        background-color: #0056b3;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+</style>
+</head>
+
+<body>
+    <div class="container mt-1">
+        <div class="row">
+            {% for venue in venues %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ venue.image.url }}" alt="venue">
+                    <div class="card-body p-5">
+                        <h3>{{ venue.venuename }}</h3>
+                        <p class="price">Nrs. {{ venue.price }} per person</p>
+                        <p>{{ venue.description }}</p>
+                        <a href="{% url 'vendor:updateVenue' venue.id  %}" class="btn btn-primary">Update</a>
+                        
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+{% endblock%}

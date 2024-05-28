@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -37,35 +38,43 @@ def login_user(request):
 
 def signup_user(request):
     if request.method == 'POST':
-        username=request.POST.get('username')
+        username = request.POST.get('username')
         name = request.POST.get('name')
         email = request.POST.get('email') 
         password = request.POST.get('password') 
         confirmpassword = request.POST.get('confirmpassword')
         phone = request.POST.get('phone') 
         address = request.POST.get('address') 
-        if password == confirmpassword:
-            messages.success(request,('Passwords match!'))
-            return redirect('user:signup')
         
-        if models.UserCustomer.objects.filter(email=email):
-            messages.success(request,('Email already exists!'))
-            return redirect('user:signup')
+        # Check if passwords match and email is unique
+        if password == confirmpassword:
+            if not UserCustomer.objects.filter(email=email).exists():
+                # Create user (hashed password)
+                user = User.objects.create_user(username=username, email=email, password=password)
+                user.save()
+                
+                # Create customer profile
+                cust = UserCustomer.objects.create(
+                    username=username,
+                    name=name,
+                    email=email,
+                    phone=phone,
+                    address=address
+                )
+                cust.save()
+                
+                # Provide success message
+                messages.success(request, 'Account created successfully!')
+                # Redirect to login page
+                return redirect('user:login')
+            else:
+                # Email already in use
+                messages.error(request, 'Email is already in use.')
         else:
-            customer = User.objects.create_user(username=username, email=email, password=password)
-            customer.save()
+            # Passwords do not match
+            messages.error(request, 'Passwords do not match.')
 
-            cust=UserCustomer.objects.create(
-                username=username,
-                name=name,
-                email=email,
-                password=password,
-                phone=phone,
-                address=address
-            )
-            cust.save()
-            messages.success(request,('Account created successfully!'))
-            return redirect('user:login')
+    # Render signup page
     return render(request, 'authenticate/signup.html', {'is_customer_signup': True})
 
 @csrf_exempt
@@ -82,9 +91,9 @@ def login_vendor(request):
                 messages.success(request, 'You have been logged in!')
                 return redirect('vendor:vendor')
             else:
-                messages.error(request, 'Invalid username or password')
+                messages.warning(request, 'Invalid username or password')
         else:
-            messages.error(request, 'User does not exist.')
+            messages.warning(request, 'User does not exist.')
 
         return redirect('user:login')  # Redirect back to the login page to display messages
 
