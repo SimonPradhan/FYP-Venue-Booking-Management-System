@@ -37,7 +37,6 @@
     }
 
     .card {
-        margin: 0 .5em;
         box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
         border: none;
     }
@@ -152,128 +151,32 @@
     </div>
 </div>
 
-
-<div class="container p-5 mt-5 mb-5">
-    <h2 class="text-center text-dark p-3">Explore...</h2>
-    <div id="venueCarousel" class="carousel slide p-4" data-bs-ride="carousel">
-        <div class="carousel-inner">
+<div class="container p-3 mt-3">
+    {% for category in categories %}
+        <div class="category p-3 bg-warning-subtle rounded"><h4 style="color:black">{{ category }}</h4></div>
+        <div class="row">
             {% for venue in list_venue %}
-            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                <div class="row">
-                    <div class="col-md-4" style="width: 300px;">
-                        <div class="img-wrapper">
-                            <div class="card p-2" onclick="toggleDescription(this)">
-                                <div class="card-inner">
-                                    <div class="card-front">
-                                        <img src="/media/{{ venue.image }}" class="card-img-top rounded-top h-100"
-                                            alt="{{ venue.name }} Image">
-                                    </div>
+                {% if venue.category == category %}
+                    <div class="col-md-3 mb-3 mt-3" style="border-radius: 10px 10px 10px 10px">
+                        <div class="card" style="cursor: pointer; box-shadow: 5px 5px 3px rgb(152, 160, 163) ;border-radius: 10px 10px 10px 10px;" >
+                            <a href="{% url 'venue:partData' venue.id %}">
+                                <img src="/media/{{ venue.image }}" class="card-img-top" alt="{{ venue.name }} Image" style="border-radius: 10px 10px 10px 10px; background-color: #f8f9fa;  height: 200px; object-fit: cover;" >
+                            </a>
+                            <div class="card-body">
+                                <div class="row ml-1 align-items-center">
+                                    <h5 class="card-title">{{ venue.venuename }} </h5>
                                 </div>
+                                <p class="card-text ml-1">{{ venue.address }}</p>
                             </div>
                         </div>
                     </div>
-                    {% if forloop.counter|divisibleby:3 or forloop.last%}
-                </div>
-            </div>
-            <div class="carousel-item">
-                <div class="row">
-                    {% endif %}
-                </div>
-            </div>
+                {% endif %}
             {% endfor %}
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#venueCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#venueCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
+    {% endfor %}
 </div>
 
-<div class="container d-flex justify-content-center" style="padding: 5px; margin-top:78px">
-    <h1 class="text-decoration-underline text-dark" style="font-size: 50px; font-weight: 300; font-weight: 400;"> Top
-        Venues</h1>
-</div>
 
-<div class="container p-3 mt-3 mb-3 data">
-    <div class="row ">
-        {% if search_data %}
-        <h3>Search Results for "{{ search_data }}":</h3>
-        {% for venue in list_venue %}
-        {% if venue.venuename|lower == search_data|lower %}
-        <div class="col-md-4 mb-3">
-            <div class="card p-5 shadow-lg" onclick="toggleDescription(this)">
-                <div class="card-inner second-inner">
-                    <div class="card-front">
-                        <img src="/media/{{ venue.image }}" class="card-img-top rounded-top"
-                            alt="{{ venue.name }} Image">
-                    </div>
-                    <div class="card-back">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ venue.venuename }}</h5>
-                            <ul class="list-unstyled">
-                                <li><strong>Address:</strong> {{ venue.address }}</li>
-                                <li><strong>Price:</strong> {{ venue.price }} (per plates)</li>
-                                <li><strong>Capacity:</strong> {{ venue.capacity }} people</li>
-                                <li><strong>Phone:</strong> {{ venue.phone }}</li>
-                                <li><strong>Description:</strong> {{ venue.description }}</li>
-                                <br>
-                                <a href="{% url 'venue:payment' %}" class="btn btn-primary">
-                                    <div class="d-flex align-items-center">
-                                        <div class="mr-2">
-                                            <i class="bi bi-journal-bookmark"></i>
-                                        </div>
-                                        <div>Book Now</div>
-                                    </div>
-                                </a>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endif %}
-        {% endfor %}
-        {% else %}
-        {% for venue in list_venue %}
-        <div class="col-md-4 mb-3">
-            <div class="card" onclick="toggleDescription(this)">
-                <div class="card-inner">
-                    <div class="card-front">
-                        <img src="/media/{{ venue.image }}" class="card-img-top rounded-top"
-                            alt="{{ venue.name }} Image" style="height: 400px;">
-                    </div>
-                    <div class="card-back">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ venue.venuename }}</h5>
-                            <ul class="list-unstyled">
-                                <li><strong>Address:</strong> {{ venue.address }}</li>
-                                <li><strong>Price:</strong> {{ venue.price }} (per plates)</li>
-                                <li><strong>Capacity:</strong> {{ venue.capacity }} people</li>
-                                <li><strong>Phone:</strong> {{ venue.phone }}</li>
-                                <li><strong>Description:</strong> {{ venue.description }}</li>
-                                <br>
-                                <a href="{% url 'venue:partData' venue.id %}" class="btn btn-primary">
-                                    <div class="d-flex align-items-center">
-                                        <div class="mr-2">
-                                            <i class="bi bi-journal-bookmark"></i>
-                                        </div>
-                                        <div>Book Now</div>
-                                    </div>
-                                </a>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-</div>
 
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 <script

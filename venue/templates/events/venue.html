@@ -3,33 +3,6 @@
 {% block content %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.9.0/main.min.css" rel="stylesheet">
-<style>
-   
-    @media (max-width: 768px) {
-       
-        .container {
-        padding: 10px; 
-    }
-    .img-fluid {
-        max-width: 100%;
-        height: auto;
-    }
-    .p-3 {
-        padding: 1rem !important;
-    }
-    .buttons {
-        display: flex;
-        flex-direction: column;
-    }
-    .book-now-btn {
-        margin-top: 10px; 
-    }
-    #calendar,
-    #google-map {
-        height: 300px;  
-    }
-    }
-</style>
 
 <div class="container bg-light rounded shadow-lg mt-4 mb-4">
     <a href="{% url 'venue:explore' %}" class="btn btn-primary mt-3 ml-3 mb-3">
@@ -41,7 +14,7 @@
         </div>
         <div class="col-md-6">
             <div class="p-3">
-                <h2 style="font-weight: bold; font-size: 32px; color: #000;">{{ venue.venuename }}</h2>
+                <h2 class="font-weight-bold text-dark">{{ venue.venuename }}</h2>
                 <ul class="list-unstyled">
                     <li><strong>Address:</strong> {{ venue.address }}</li>
                     <li><strong>Price:</strong> {{ venue.price }} (per plate)</li>
@@ -49,62 +22,39 @@
                     <li><strong>Phone:</strong> {{ venue.phone }}</li>
                     <li><strong>Description:</strong> {{ venue.description }}</li>
                 </ul>
-                <!-- Add more details as needed -->
-
-                <!-- Back button to explore page with icon -->
             </div>
             <div class="buttons p-4">
-                <!-- chat now button -->
-                <a href= "{% url 'chats:chat' %}?venue_id={{ request.session.venue_id }}&user_id={{ request.session.user_id }}" class="btn btn-primary" id="chatbutton">
-                    <div class="row align-items-center justify-content-center">
-                        <div class="col-2">
-                            <i class="bi bi-chat-dots"></i>
-                        </div>
-                        <div class="col-3">Chat Now</div>
-                    </div>
+                <a href="{% url 'chats:chat' %}?venue_id={{ request.session.venue_id }}&user_id={{ request.session.user_id }}" class="btn btn-primary" id="chatbutton">
+                    <i class="bi bi-chat-dots"></i> Chat Now
                 </a>
-                <!-- book now button  -->
                 <button class="btn btn-primary book-now-btn" data-bs-toggle="modal" data-bs-target="#bookingModal">
-                    <div class="row align-items-center">
-                        <div class="col-2">
-                            <i class="bi bi-journal-bookmark"></i>
-                        </div>
-                        <div class="col-3">Book Now</div>
-                    </div>
+                    <i class="bi bi-journal-bookmark"></i> Book Now
                 </button>
             </div>
         </div>
     </div>
-    <div class="row mt-4">
-        <!-- Calendar section -->
-        <div class="col-md-6">
-            <h3>Calendar</h3>
-            <div id="calendar" style="height: 400px; border: 1px solid #ccc"></div>
-        </div>
-
-        <!-- Map section -->
-        <div class="col-md-6 mb-3">
+    <div class="row p-3 mt-4">
+        <div class="col p-2 mb-3">
             <h3>Google Map</h3>
-            <div id="google-map" style="height: 400px; border: 2px solid #000000"></div>
+            <div id="google-map" class="border" style="height: 400px;"></div>
         </div>
     </div>
 </div>
+
 <div class="modal fade right my-5" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="bookingModalLabel">Booking Form</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                        class="bi bi-x"></i></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x"></i></button>
             </div>
             <div class="modal-body">
-                <form method="POST" >
+                <form method="POST" id="bookingForm">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="eventName">Event Name:</label>
                         <input type="text" class="form-control" id="eventName" name="eventName" required>
                     </div>
-
                     <div class="form-group">
                         <label for="event">Event Type:</label>
                         <select class="form-select" id="event" name="eventType" required>
@@ -116,15 +66,13 @@
                             <option value="other">Other</option>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label for="date">Date:</label>
                         <input type="date" class="form-control" id="date" name="date" required>
                     </div>
                     <div class="form-group">
-                        <label for="time">Time:</label>
-                        <select name="time" id="time">
-                            <option value="10:00">-- --</option>
+                            <label for="time">Time:</label>
+                        <select name="time" id="time" class="form-control">
                             <option value="10:00">10:00</option>
                             <option value="11:00">11:00</option>
                             <option value="12:00">12:00</option>
@@ -139,28 +87,20 @@
                             <option value="21:00">21:00</option>
                             <option value="22:00">22:00</option>
                         </select>
-                        <!-- <input type="time" class="form-control" id="time" name="time" min="10:00" max="22:00" required> -->
                     </div>
-
                     <div class="form-group">
                         <label for="guests">Number of Guests:</label>
                         <input type="number" class="form-control" id="guests" name="guests" required>
                     </div>
-
                     <div class="form-group">
                         <label for="message">Special Request:</label>
                         <textarea class="form-control" id="message" name="message" rows="3"></textarea>
                     </div>
-
-                    <div class="cost" id="cost">
-                        <h4>Cost: $</h4>
+                    <div id="cost">
+                        <h4>Cost: NRs. </h4>
                     </div>
-
-                        <button type="submit" value="Book"  class="btn btn-primary payment-button" id="payment-button">Pay via Khalti</button>
-
-                    </form>
-
-               
+                    <button type="submit" class="btn btn-primary payment-button" id="payment-button">Pay via Khalti</button>
+                </form>
             </div>
         </div>
     </div>
@@ -169,183 +109,34 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.9.0/main.min.js"></script>
-<!-- <script src = "{%static 'index.js'%}"></script> -->
 <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-<script>
-    
-    // Function to update the total cost based on the number of guests
-    function updateTotalCost() {
-        // Get the number of guests input field
-        var guestsInput = document.getElementById('guests');
-        
-        // Get the price per plate (assuming it's already defined)
-        var pricePerPlate = {{ venue.price }};
-        
-        // Calculate the total cost
-        var totalCost = guestsInput.value * pricePerPlate;
-        
-        // Update the HTML content to display the total cost
-        document.getElementById('cost').innerHTML = "<h4>Cost: $" + totalCost + "</h4>";
-    }
-    
-    // Add an event listener to the "Number of Guests" input field
-    document.getElementById('guests').addEventListener('input', updateTotalCost);
-</script>
-
-<script>
-    // function saveBookingDetails() {
-    //     // Get the form input values
-    //     var eventName = document.getElementById('eventName').value;
-    //     var eventType = document.getElementById('event').value;
-    //     var date = document.getElementById('date').value;
-    //     var time = document.getElementById('time').value;
-    //     var guests = document.getElementById('guests').value;
-    //     var message = document.getElementById('message').value;
-    //     var cost = document.getElementById('cost').textContent.trim().split(':')[1].trim();
-
-    //     // Create an object to store booking details
-    //     var bookingData = {
-    //         'eventName': eventName,
-    //         'eventType': eventType,
-    //         'date': date,
-    //         'time': time,
-    //         'guests': guests,
-    //         'message': message,
-    //         'cost': cost
-    //     };
-
-    //     // Save booking data to local storage
-    //     localStorage.setItem('bookingData', JSON.stringify(bookingData));
-    // }
-
-
-    // // Add an event listener to the "Book Now" button
-    // document.getElementById('bookNowButton').addEventListener('click', function() {
-    //     // Call the function to save booking details in local storage
-    //     saveBookingDetails();
-
-    //     // Redirect to the payment page
-        
-    // });
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  var calendarEl = document.getElementById('calendar');
-  var calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: 'dayGridMonth', // Display month view initially
-    selectable: true, // Allow date selection
-    events: [
-      // Add booked dates here as events
-      { 
-        title: 'Booked', 
-        start: '2024-05-10', // Example booked date
-        allDay: true 
-      },
-      // Add more booked dates as needed
-    ],
-    select: function(info) {
-      // Handle date selection if needed
-    }
-  });
-  calendar.render();
-});
-  
-</script>
-
-
-<script>
-    function booking(){
-        var eventName = document.getElementById('eventName').value;
-        var eventType = document.getElementById('event').value;
-        var date = document.getElementById('date').value;
-        var time = document.getElementById('time').value;
-        var guests = document.getElementById('guests').value;
-        var message = document.getElementById('message').value;
-        var cost = document.getElementById('cost').textContent.trim().split(':')[1].trim();
-        var bookingData = {
-            'eventName': eventName,
-            'eventType': eventType,
-            'date': date,
-            'time': time,
-            'guests': guests,
-            'message': message,
-            'cost': cost
-        };
-        console.log(bookingData);
-        console.log("Works")
-}
-var config = {
-        "publicKey": "test_public_key_47efbc9b82e848fcbd2579c01cdb3c73",
-        "productIdentity": "1234567890",
-        "productName": "Dragon",
-        "productUrl": "http://gameofthrones.wikia.com/wiki/Dragons",
-        "paymentPreference": [
-            "KHALTI",
-            "EBANKING",
-            "MOBILE_BANKING",
-            "CONNECT_IPS",
-            "SCT",
-        ],
-        "eventHandler": {
-            onSuccess(payload) {
-                console.log("Works")
-                fetch("{% url 'payments:khalti' %}", {
-                        method: 'post',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(payload)
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("anshy gay");
-                        console.log(data.details);
-                        if (data.status === "success") {
-                            // Optionally, you can redirect or show a success message
-                            window.location.href = "{% url 'venue:home' %}";
-                        } else {
-                            // Handle the error
-                            alert("Payment failed!");
-                        }
-                    });
-            },
-            onError(error) {
-                console.error(error);
-            },
-            onClose() {
-                console.log('widget is closing');
-            }
-        }
-    };
-
-    var checkout = new KhaltiCheckout(config);
-    var btn = document.getElementById("payment-button");
-    btn.onclick = function (e) {
-        e.preventDefault();
-        // Validate the form here if needed
-        // minimum transaction amount must be 10, i.e 1000 in paisa.
-        checkout.show({ amount: 1000 });
-}
-</script>
-
-<!-- AIzaSyB4tMhMVQdzmxU8cJc0ZVja6py8tY1OMCc -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4tMhMVQdzmxU8cJc0ZVja6py8tY1OMCc&callback=initMap" async defer></script>
 
 <script defer >
-   
-  
     document.getElementById("date").addEventListener("change", function() {
-   
+    
     const chosenDate = new Date(this.value);
-   
+
+    // console.log(chosenDate);
+    if (chosenDate >= new Date()) {
+        document.getElementById("bookNowButton").disabled = false;
+    } else {
+        document.getElementById("bookNowButton").disabled = true;
+    }
+    const bookingData = {{ booking_data|safe }};
+    
+    var bookingsForSelectedDate,timesForSelectedDate = [];
+    console.log(bookingsForSelectedDate)
+    // Get the select element
+    var selectElement = document.getElementById('time');
+    
     // Get the selected date
     var selectedDate = document.getElementById('date').value;
     
     // Filter booking data for the selected date
     bookingsForSelectedDate = bookingData.filter(booking => booking.date === selectedDate);
-  
+    
     // Extract time values for the selected date
     timesForSelectedDate = bookingsForSelectedDate.map(booking => booking.time);
 
@@ -360,69 +151,161 @@ var config = {
         
         }
     }
-});
+    });
+</script>
 
-// Define the coordinates of the desired location
-// Define the name of the place you want to search
-// var placeName = "{{venue.address}}"; // Example place name
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+        // Function to handle form submission
+        function handleFormSubmission() {
+            // Fetch form values when the form is submitted
+            var eventName = document.getElementById('eventName').value;
+            var eventType = document.getElementById('event').value;
+            var date = document.getElementById('date').value;
+            var time = document.getElementById('time').value;
+            var guests = document.getElementById('guests').value;
+            var message = document.getElementById('message').value;
+            var cost = document.getElementById('cost').textContent.replace('NRs.', '').trim().split(':')[1].trim();
 
-// // Make a request to the Nominatim API to search for the place name
-// fetch('https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(placeName) + '&format=json')
-//   .then(response => response.json())
-//   .then(data => {
-//     // Check if the response contains any results
-//     if (data && data.length > 0) {
-//       // Extract the latitude and longitude from the first result
-//       var latitude = data[0].lat;
-//       var longitude = data[0].lon;
-      
-//       // Initialize the map with the view set to the desired location
-//       var map = L.map('map').setView([latitude, longitude], 18); // Set initial coordinates and zoom level
 
-//       // Add a tile layer (OpenStreetMap tile layer)
-//       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//           attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-//           maxZoom: 100
-//       }).addTo(map);
-//     } else {
-//       console.log("No results found for the place name:", placeName);
-//     }
-//   })
-//   .catch(error => {
-//     console.error("Error fetching data from the Nominatim API:", error);
-//   });
+            // Create an object to store booking details
+            var bookingData = {
+                'eventName': eventName,
+                'eventType': eventType,
+                'date': date,
+                'time': time,
+                'guests': guests,
+                'message': message,
+                'cost': cost
+            };
 
-function initMap() {
-        // Define the coordinates of the desired location
-        var placeName = "{{ venue.address }}"; // Example place name
+            console.log(bookingData);
+            console.log("Works");
+        }
 
-        // Make a request to the Geocoding API to get the coordinates for the place name
-        var geocoder = new google.maps.Geocoder();
+        // Add event listener to the form submit button
+        document.getElementById('payment-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            handleFormSubmission();
+        });
+    });
+
+
+    function updateTotalCost() {
+        const guests = $('#guests').val();
+        const pricePerPlate = {{ venue.price }};
+        const totalCost = guests * pricePerPlate;
+        $('#cost').html('<h4>Cost:' + totalCost + '</h4>');
+    }
+
+    $('#guests').on('input', updateTotalCost);
+
+    function initCalendar() {
+        const calendarEl = $('#calendar')[0];
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            selectable: true,
+            events: [
+                { title: 'Booked', start: '2024-05-10', allDay: true },
+                // Add more booked dates as needed
+            ]
+        });
+        calendar.render();
+    }
+
+    $(document).ready(function() {
+        initCalendar();
+    });
+
+    function initMap() {
+        const placeName = "{{ venue.address }}";
+        const geocoder = new google.maps.Geocoder();
         geocoder.geocode({ 'address': placeName }, function(results, status) {
             if (status === 'OK') {
-                // Get the latitude and longitude from the first result
-                var location = results[0].geometry.location;
-                
-                // Initialize the map with the view set to the desired location
-                var map = new google.maps.Map(document.getElementById('google-map'), {
+                const location = results[0].geometry.location;
+                const map = new google.maps.Map($('#google-map')[0], {
                     center: location,
-                    zoom: 18 // Set initial zoom level
+                    zoom: 18
                 });
-
-                // Add a marker at the location
-                var marker = new google.maps.Marker({
+                new google.maps.Marker({
                     position: location,
                     map: map,
-                    title: "{{ venue.venuename }}" // Example venue name
+                    title: "{{ venue.venuename }}"
                 });
             } else {
                 console.error('Geocode was not successful for the following reason: ' + status);
             }
         });
     }
+
+    const config = {
+        publicKey: "test_public_key_47efbc9b82e848fcbd2579c01cdb3c73",
+        productIdentity: "{{venue.id}}",
+        productName: "{{venue.venuename}}",
+        productUrl: "http://example.com/venue",
+        paymentPreference: ["KHALTI"],
+        eventHandler: {
+            onSuccess(payload) {
+                console.log(payload);
+                const eventName = document.getElementById('eventName').value;
+                const eventType = document.getElementById('event').value;
+                const date = document.getElementById('date').value;
+                const time = document.getElementById('time').value;
+                const guests = document.getElementById('guests').value;
+                const message = document.getElementById('message').value;
+                const cost = document.getElementById('cost').textContent.trim().split(':')[1].trim();
+                
+                // Create an object to store booking details
+                const bookingData = {
+                    'eventName': eventName,
+                    'eventType': eventType,
+                    'date': date,
+                    'time': time,
+                    'guests': guests,
+                    'message': message,
+                    'cost': cost
+                };
+                const body = {
+                payload: payload,
+                bookingData: bookingData
+            };
+
+                fetch("{% url 'venue:booking' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                }, body: JSON.stringify(body)
+                }).then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.status) { // Redirect to another page after successful payment
+                        window.location="{% url 'venue:home' %}"
+                    }
+                });
+                alert('Payment successful!');
+                $('#bookingForm').submit();
+            },
+            onError(error) {
+                console.error(error);
+                alert('Payment failed!');
+            },
+            onClose() {
+                console.log('widget is closing');
+            }
+        }
+    };
+    const checkout = new KhaltiCheckout(config);
+    $('#payment-button').on('click', function(e) {
+        e.preventDefault();
+        updateTotalCost();
+        const totalCost = $('#cost h4').text().replace('Cost:', '');
+        if (totalCost > 0) {
+            checkout.show({ amount: (totalCost * 100) /2});
+        } else {
+            alert('Please enter the number of guests.');
+        }
+    });
 </script>
-
-  
-
 
 {% endblock %}

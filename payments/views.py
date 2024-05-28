@@ -7,6 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from django.core.mail import send_mail
 from venue import views
+
+
 @csrf_exempt
 def khalti(request):
     data = json.loads(request.body)
@@ -45,6 +47,41 @@ def khalti(request):
             'status':False,
             'details':str(e),
         })
+    
+
+
+# views.py
+
+
+@csrf_exempt
+def initiate_payment(request):
+    if request.method == 'POST':
+        url = "https://a.khalti.com/api/v2/epayment/initiate/"
+
+        payload = json.dumps({
+            "return_url": "http://example.com/",
+            "website_url": "https://example.com/",
+            "amount": "1000",
+            "purchase_order_id": "Order01",
+            "purchase_order_name": "test",
+            "customer_info": {
+                "name": "Ram Bahadur",
+                "email": "test@khalti.com",
+                "phone": "9800000001"
+            }
+        })
+        headers = {
+            'Authorization': 'test_secret_key_054bf433e1b343409cb7e79a087923ef',
+            'Content-Type': 'application/json',
+        }
+
+        response = requests.post(url, headers=headers, data=payload)
+
+        return JsonResponse(response.json())
+    else:
+        return JsonResponse({"error": "Invalid request method."}, status=400)
+
+
 
 def invoice(email, amount, product_name, idx):
     print(email, amount, product_name, idx)

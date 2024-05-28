@@ -48,7 +48,10 @@
     
             <div class="logins collapse navbar-collapse justify-content-end" id="navbarNav">
                 {% if not user.is_authenticated %}
-                <a class="btn btn-outline-primary" href="{%url 'user:login'%}">Login</a>
+                <div class="authbox justify-content-between">
+                    <a class="btn btn-outline-primary" href="{%url 'user:login'%}">Login</a>
+                    <a class="btn btn-outline-primary" href="{%url 'user:signup'%}">SignUp</a>
+                </div>
                 {% endif %}
                 {% if user.is_authenticated %}
                 <div class="afterlogin">
