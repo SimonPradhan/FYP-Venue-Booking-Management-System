@@ -3,126 +3,148 @@
 
 {% block content %}
 <style>
-    /* .data{
-        background-color: #edede9ff;
-    } */
-    /*  */
-    /* @media screen and (min-width: 576) {
-        .carousel-inner{
-            display: flex;
-        }
-
-        .carousel-item{
-            display: block;
-            margin-right: 0;
-            flex: 0 0 calc(100% / 3);
-
-        }
-    } */
-
-    @media (min-width: 768px) {
-        .carousel-inner {
-            display: flex;
-        }
-
-        .carousel-item {
-            margin-right: 0;
-            flex: 0 0 33.333333%;
-            display: block;
-        }
-    }
-
-    .carousel-inner {
-        padding: 1em;
-    }
-
-    .card {
-        box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
+    /* .card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         border: none;
-    }
-
-    .carousel-control-prev,
-    .carousel-control-next {
-        background-color: #e1e1e1;
-        width: 6vh;
-        height: 6vh;
-        border-radius: 50%;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    .card {
-        cursor: pointer;
-        width: 100%;
-        margin-bottom: 20px;
-        perspective: 1000px;
-    }
-
-    .card-inner {
-        position: relative;
-        width: 100%;
-        height: 400px;
-        transition: transform 0.5s;
-        transform-style: preserve-3d;
-    }
-
-    .card-front,
-    .card-back {
-        position: absolute;
-        width: 100%;
+        border-radius: 10px;
+        transition: transform 0.3s ease;
         height: 100%;
-        backface-visibility: hidden;
     }
 
-    .card-front {
-        z-index: 2;
-    }
-
-    .card-back {
-        transform: rotateY(180deg);
-        z-index: 1;
-        padding: 20px;
-        /* Add padding to contain the content */
-        box-sizing: border-box;
-        /* Ensure padding is included in width calculation */
-        overflow-y: auto;
-        /* Add scroll if content exceeds height */
-    }
-
-    .card.flipped .card-inner {
-        transform: rotateY(180deg);
+    .card:hover {
+        transform: scale(1.02);
     }
 
     .card-img-top {
-        width: 100%;
-        height: auto;
+        height: 200px;
+        object-fit: cover;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
     }
 
     .card-body {
-        padding: 1.25rem;
+        padding: 1rem;
+    } */
+    .card {
+    position: relative;
+    width: 250px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background-color: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    .description {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease-out;
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
 
-    .card .img-wrapper {
-        max-width: 100%;
-        height: 13em;
+    .card-img-top {
+        height: 300px;
+        object-fit: cover;
+        width: 100%;
+        display: block;
+    }
+
+    .card-overlay {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+        color: white;
+        padding: 0.75rem;
+    }
+
+    .card-title,
+    .card-text {
+        margin: 0;
+        line-height: 1.3;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .card-text {
+        font-size: 0.9rem;
+    }
+
+    .scroll-wrapper {
+    position: relative;
+    }
+
+    .scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 50%;
+    }
+
+    .scroll-btn.left {
+    left: 0;
+    }
+
+    .scroll-btn.right {
+    right: 0;
+    }
+
+    .horizontal-scroll {
+        overflow-x: auto;
+        white-space: nowrap;
+        scroll-behavior: smooth;
+        width: 100%;
+    }
+
+    .scroll-items {
         display: flex;
-        justify-content: center;
-        align-items: center;
+        flex-wrap: nowrap;
+        min-width: max-content; /* This ensures it overflows horizontally */
+        gap: 1rem;
     }
 
-    img {
-        max-height: 100%;
+    .horizontal-scroll::-webkit-scrollbar {
+        display: none;  /* Chrome, Safari and Opera */
     }
 
+    /* .horizontal-scroll .scroll-items {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 1rem; 
+    } */
+
+    .category {
+        background-color: #f8f9fa;
+        /* color: #ffffff; */
+        border-left: 4px solid #9c27b0;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .head h1 {
+            font-size: 1.5rem;
+        }
+
+        .head h2 {
+            font-size: 1rem;
+        }
+
+        .responsive-image {
+            height: 50vh !important;
+        }
+    }
 </style>
 
-<div class="mbox p-0" style="background-color: rgba(194, 129, 244, 0.589);" id="background-image">
+
+<div class="mbox p-0 mb-3" style="background-color: rgba(194, 129, 244, 0.589);" id="background-image">
         <div class="head position-absolute">
             <h1>Book Now</h1>
             <h2>Venue of Choice</h2>
@@ -130,7 +152,7 @@
             <h3>Welcome, {{ profile.name.split.0 }}</h3>
             {% endif %}
         </div>
-    <img src="{% static 'images/venue.png' %}" class="responsive-image" style="width: 100%; height: 70vh; opacity: 80%;"
+    <img src="{% static 'images/venue.png' %}" class="responsive-image" style="width: 100%; height: 70vh; opacity: 80%;" 
         alt="Responsive image">
     <div class="container position-relative justify-content-center"
         style="margin-top: -8.2rem; -webkit-margin-top: -8.2rem">
@@ -151,74 +173,81 @@
     </div>
 </div>
 
-<div class="container p-3 mt-3">
+
+<div class="container p-3 mt-5 rounded">
+
     {% for category in categories %}
-        <div class="category p-3 bg-warning-subtle rounded"><h4 style="color:black">{{ category }}</h4></div>
-        <div class="row">
+    <div class="category p-3 mb-3 mt-4 bg-transparent rounded">
+        <h4 class="text-dark fw-bold mb-0">{{ category }}</h4>
+    </div>
+    <div class="scroll-wrapper position-relative">
+    <div class="horizontal-scroll">
+        <div class="scroll-items">
             {% for venue in list_venue %}
                 {% if venue.category == category %}
-                    <div class="col-md-3 mb-3 mt-3" style="border-radius: 10px 10px 10px 10px">
-                        <div class="card" style="cursor: pointer; box-shadow: 5px 5px 3px rgb(152, 160, 163) ;border-radius: 10px 10px 10px 10px;" >
-                            <a href="{% url 'venue:partData' venue.id %}">
-                                <img src="/media/{{ venue.image }}" class="card-img-top" alt="{{ venue.name }} Image" style="border-radius: 10px 10px 10px 10px; background-color: #f8f9fa;  height: 200px; object-fit: cover;" >
-                            </a>
-                            <div class="card-body">
-                                <div class="row ml-1 align-items-center">
-                                    <h5 class="card-title">{{ venue.venuename }} </h5>
+                    <div class="flex: 0 0 auto; width: 250px;">
+                        <div class="card">
+                            <a href="{% url 'venue:partData' venue.id %}" class="card-link">
+                                <img src="/media/{{ venue.image }}" class="card-img-top rounded" alt="{{ venue.name }}">
+                                <div class="card-overlay">
+                                    <h5 class="card-title">{{ venue.venuename }}</h5>
+                                    <p class="card-text">{{ venue.address }}</p>
                                 </div>
-                                <p class="card-text ml-1">{{ venue.address }}</p>
-                            </div>
+                            </a>
                         </div>
+
                     </div>
                 {% endif %}
             {% endfor %}
         </div>
+    </div>
+        <button class="scroll-btn right" onclick=scrollContainerRight(this)>&#10095;</button>
+        <button class="scroll-btn left" onclick=scrollContainerLeft(this)>&#10094;</button>
+    </div>
     {% endfor %}
 </div>
 
-
-
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4tMhMVQdzmxU8cJc0ZVja6py8tY1OMCc&libraries=places"></script>
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOpwO3oObsGJE-eE3SwP_yFj9F2yoNtwE&libraries=places"></script>
 
 <script>
-    function toggleDescription(card) {
-        card.classList.toggle('flipped');
-    }
+    // function toggleDescription(card) {
+    //     card.classList.toggle('flipped');
+    // }
 
-    var carouselWidth = $(".carousel-inner")[0].scrollWidth;
-    var cardWidth = $(".carousel-item").width();
-    var scrollPosition = 0;
+    // var carouselWidth = $(".carousel-inner")[0].scrollWidth;
+    // var cardWidth = $(".carousel-item").width();
+    // var scrollPosition = 0;
 
-    $(".carousel-control-next").on("click", function () {
-        if (scrollPosition < (carouselWidth - cardWidth * 4)) { //check if you can go any further
-            scrollPosition += cardWidth * 3;  //update scroll position
-            $(".carousel-inner").animate({ scrollLeft: scrollPosition }, 600); //scroll left
-        }
-    });
+    // $(".carousel-control-next").on("click", function () {
+    //     if (scrollPosition < (carouselWidth - cardWidth * 4)) { //check if you can go any further
+    //         scrollPosition += cardWidth * 3;  //update scroll position
+    //         $(".carousel-inner").animate({ scrollLeft: scrollPosition }, 600); //scroll left
+    //     }
+    // });
 
-    $(".carousel-control-prev").on("click", function () {
-        if (scrollPosition > 0) {
-            scrollPosition -= cardWidth * 3;
-            $(".carousel-inner").animate(
-                { scrollLeft: scrollPosition },
-                600
-            );
-        }
-    });
+    // $(".carousel-control-prev").on("click", function () {
+    //     if (scrollPosition > 0) {
+    //         scrollPosition -= cardWidth * 3;
+    //         $(".carousel-inner").animate(
+    //             { scrollLeft: scrollPosition },
+    //             600
+    //         );
+    //     }
+    // });
 
-    var multipleCardCarousel = document.querySelector(
-        "#carouselExampleControls"
-    );
-    if (window.matchMedia("(min-width: 768px)").matches) {
-        //rest of the code
-        var carousel = new bootstrap.Carousel(multipleCardCarousel, {
-            interval: false
-        });
-    } else {
-        $(multipleCardCarousel).addClass("slide");
-    }
+    // var multipleCardCarousel = document.querySelector(
+    //     "#carouselExampleControls"
+    // );
+    // if (window.matchMedia("(min-width: 768px)").matches) {
+    //     //rest of the code
+    //     var carousel = new bootstrap.Carousel(multipleCardCarousel, {
+    //         interval: false
+    //     });
+    // } else {
+    //     $(multipleCardCarousel).addClass("slide");
+    // }
 
     // fnction toggleDescription(card) {
     //     const descriptionDiv = card.querySelector('.description');
@@ -236,6 +265,7 @@
     // This example requires the Places library. Include the libraries=places
     // parameter when you first load the API. For example:
     // 
+
     function initMap() {
         const map = new google.maps.Map(document.getElementById("map"), {
             center: { lat: 40.749933, lng: -73.98633 },
@@ -345,6 +375,27 @@
     }
 
     window.initMap = initMap;
+
+    
+</script>
+<script>
+    function scrollContainerLeft(button) {
+        const wrapper = button.closest('.scroll-wrapper');
+        const scrollContainer = wrapper.querySelector('.horizontal-scroll');
+        scrollContainer.scrollBy({
+            left: -300, // Adjust scroll amount as needed
+            behavior: 'smooth'
+        });
+    }
+
+    function scrollContainerRight(button) {
+        const wrapper = button.closest('.scroll-wrapper');
+        const scrollContainer = wrapper.querySelector('.horizontal-scroll');
+        scrollContainer.scrollBy({
+            left: 300, // Adjust scroll amount as needed
+            behavior: 'smooth'
+        });
+    }
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

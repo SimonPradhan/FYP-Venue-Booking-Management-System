@@ -10,7 +10,7 @@
     </a>
     <div class="row">
         <div class="col-md-6">
-            <img src="/media/{{ venue.image }}" alt="{{ venue.name }} Image" class="img-fluid mb-3" />
+            <img src="/media/{{ venue.image }}" alt="{{ venue.name }} Image" class="img-fluid mb-3 rounded style="height: 500px; width: 100%; object-fit: cover;" />
         </div>
         <div class="col-md-6">
             <div class="p-3">
@@ -24,6 +24,7 @@
                 </ul>
             </div>
             <div class="buttons p-4">
+                <p class="text-warning" style="text-transform:uppercase;">Pay advance 50% now and rest before event ~~</p>
                 <a href="{% url 'chats:chat' %}?venue_id={{ request.session.venue_id }}&user_id={{ request.session.user_id }}" class="btn btn-primary" id="chatbutton">
                     <i class="bi bi-chat-dots"></i> Chat Now
                 </a>
@@ -119,9 +120,9 @@
 
     // console.log(chosenDate);
     if (chosenDate >= new Date()) {
-        document.getElementById("bookNowButton").disabled = false;
+        document.getElementById("payment-button").disabled = false;
     } else {
-        document.getElementById("bookNowButton").disabled = true;
+        document.getElementById("payment-button").disabled = true;
     }
     const bookingData = {{ booking_data|safe }};
     

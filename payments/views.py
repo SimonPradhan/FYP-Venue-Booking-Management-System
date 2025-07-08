@@ -82,20 +82,45 @@ def initiate_payment(request):
         return JsonResponse({"error": "Invalid request method."}, status=400)
 
 
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
 
-def invoice(email, amount, product_name, idx):
-    print(email, amount, product_name, idx)
-    
+def invoice(email, total_amount, product_name, idx):
+    # Calculate the amounts
+    total_amount = float(total_amount)
+    amount_paid = total_amount * 0.5
+    remaining_amount = total_amount - amount_paid
+
+    # Print the details for debugging
+    print(email, total_amount, product_name, idx)
+
+    # Compose the email subject and message
     subject = 'EaseEvent Payment Invoice'
-    message = f'Your amount for {product_name} is {amount}.'
     from_email = settings.EMAIL_HOST_USER
     recipient_list = [email]
 
-    # Print for testing, comment out in production
-    print(subject, message, from_email, recipient_list)
+    # Render the HTML template
+    html_message = render_to_string('events/invoice_payment.html', {
+        'idx': idx,
+        'created_date': '2024-05-29',
+        'due_date': '2024-06-29',
+        'email': email,
+        'product_name': product_name,
+        'total_amount': total_amount,
+        'amount_paid': amount_paid,
+        'remaining_amount': remaining_amount,
+    })
 
-    # Send the email using Gmail
-    send_mail(subject, message, from_email, recipient_list, fail_silently=True)
+    # Create the email message
+    email_message = EmailMultiAlternatives(subject, "", from_email, recipient_list)
+    email_message.attach_alternative(html_message, "text/html")
 
-    return Response({'status':True})
+    # Print the email details for testing (comment out in production)
+    print(subject, html_message, from_email, recipient_list)
+
+    # Send the email using the configured email backend
+    email_message.send(fail_silently=True)
+
+    # Return the response
+    return Response({'status': True})
     

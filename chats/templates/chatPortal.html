@@ -2,18 +2,25 @@
 {% load static %}
 {% block title %}Chats{% endblock %}
 {% block content %}
-<div class="container mt-3 p-3">
-    <h2 class="text-center mb-4">Chats</h2>
+<div class="container mt-5 p-4">
+    <h2 class="text-center mb-4 p-3 bg-light rounded shadow-sm">Chats</h2>
     <div class="row">
-        <div class="col-12">
-            <h3>Active Rooms</h3>
-            <ul>
-                {% for ru in room %}
-                    <li>{{ ru.name }}</li>
+        <div class="col-12 mb-4">
+            <h3 class="mb-3">Active Users</h3>
+            <div id="userslist" class="list-group">
+                {% for room in rooms %}
+                    <a href="{% url 'chats:chatsecond' room.user_id_id %}?vendor_id={{ request.session.vendor_id }}&user_id={{ room.user_id_id}}" class="list-group-item list-group-item-action roomselect" id="roomSelect" >
+                        {{ room.name }}
+                    </a>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
     </div>
 </div>
+<script>
+    // Inject the vendor_id as a global variable
+    var vendor_id = "{{ vendor_id }}";
+</script>
+
 <script src="{% static 'js/index.js' %}"></script>
 {% endblock %}

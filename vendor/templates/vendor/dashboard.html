@@ -7,6 +7,7 @@
       <div
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Dashboard</h1>
+        <h2>Welcome, {{vendor.namex}}</h2>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -23,7 +24,7 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Total Customers</h5>
-              <p class="card-text">{{ totalCustomer }}</p>
+              <p class="card-text cust">{{ totalCustomer }}</p>
             </div>
           </div>
         </div>
@@ -31,7 +32,7 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Total Bookings</h5>
-              <p class="card-text">{{ totalbooking }}</p>
+              <p class="card-text book">{{ totalbooking }}</p>
             </div>
           </div>
         </div>
@@ -43,6 +44,8 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
 <script>
+  const totalbooking = {{totalbooking}};
+  const totalCustomer = {{totalCustomer}}
 
   let ctx = document.getElementById("chart").getContext("2d");
 
@@ -52,6 +55,7 @@
       labels: ['Total Bookings', 'Total Customers'],
       datasets: [{
         label: 'Count',
+        data : [totalbooking, totalCustomer], 
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)', // Red color for bookings
           'rgba(54, 162, 235, 0.2)' // Blue color for customers

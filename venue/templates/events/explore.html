@@ -2,6 +2,19 @@
 {% load static %}
 
 {% block content %}
+<style>
+    .card-img-overlay{
+        background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0));
+        border-radius: 0px 0px 0px 0px;
+    }
+    .card-img-overlay h5,
+    .card-img-overlay p {
+        margin-bottom: 0.2rem;
+        color: white;
+        text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    }
+
+</style>
 
 <div class="container mt-3 mb-3">
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -32,14 +45,28 @@
         <h3>Search Results for "{{ search_data }}":</h3>
         {% for venue in list_venue %}
         {% if venue.venuename|lower == search_data|lower %}
-            <div class="col-md-4 mb-3">
+            <!-- <div class="col-md-4 mb-3">
                 <div class="card" style="cursor: pointer; box-shadow: 5px 5px 3px rgb(152, 160, 163)" >
-                    <img src="/media/{{ venue.image }}" class="card-img-top" alt="{{ venue.name }} Image" style="border-radius: 0px 30px 0px 30px; background-color: #f8f9fa;" data-bs-toggle="modal" data-bs-target="#venueModal{{ venue.id }}" width="400" height="400">
+                    <a href="{% url 'venue:partData' venue.id %}">
+                        <img src="/media/{{ venue.image }}" class="card-img-top" alt="{{ venue.name }} Image" style="border-radius: 0px 30px 0px 30px; background-color: #f8f9fa;" data-bs-toggle="modal" data-bs-target="#venueModal{{ venue.id }}" width="400" height="400">
+                    </a>
                     <div class="card-body">
                         <div class="row ml-1 align-items-center">
                             <h5 class="card-title">{{ venue.venuename }} </h5>
                         </div>
                         <p class="card-text ml-1">{{ venue.address }}</p>
+                    </div>
+                </div> -->
+
+                <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+                    <div class="card text-white overflow-hidden position-relative" style="border-radius: 0px 0px 0px 0px;">
+                        <a href="{% url 'venue:partData' venue.id %}">
+                            <img src="/media/{{ venue.image }}" class="card-img" alt="{{ venue.venuename }} Image" style="height: 400px; object-fit: cover;">
+                        </a>
+                        <div class="card-img-overlay d-flex flex-column justify-content-end" style="background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0));">
+                            <h5 class="card-title">{{ venue.venuename }}</h5>
+                            <p class="card-text">{{ venue.address }}</p>
+                        </div>
                     </div>
                 </div>
 
@@ -49,9 +76,6 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="venueModalLabel">{{ venue.venuename }}</h5>
-                                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button> -->
                             </div>
                             <div class="modal-body">
                                 <p><strong>Address:</strong> {{ venue.address }}</p>
@@ -59,7 +83,6 @@
                                 <p><strong>Capacity:</strong> {{ venue.capacity }} people</p>
                                 <p><strong>Phone:</strong> {{ venue.phone }}</p>
                                 <p><strong>Description:</strong> {{ venue.description }}</p>
-                                <!-- Add more details as needed -->
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -73,11 +96,11 @@
             {% endfor %}
             {% else %}
             {% for venue in list_venue %}
-            <div class="col-md-4 mb-3">
-                <div class="card" style="cursor: pointer; box-shadow: 5px 5px 3px rgb(152, 160, 163)" >
-                    <img src="/media/{{ venue.image }}" class="card-img-top" alt="{{ venue.name }} Image" style="border-radius: 0px 30px 0px 30px; background-color: #f8f9fa;" data-bs-toggle="modal" data-bs-target="#venueModal{{ venue.id }}" width="400" height="400">
-                    <div class="card-body">
-                        <div class="row ml-1 align-items-center">
+            <div class="col-md-3 mb-3">
+                <div class="card text-white overflow-hidden position-relative" style="cursor: pointer;  box-shadow: 5px 5px 3px rgb(152, 160, 163)" >
+                    <img src="/media/{{ venue.image }}" class="card-img-top bg-dark" alt="{{ venue.name }} Image" style="border-radius: 0px 0px 0px 0px; background-color: #f8f9fa;" data-bs-toggle="modal" data-bs-target="#venueModal{{ venue.id }}" width="300" height="400">
+                    <div class="card-body card-img-overlay d-flex flex-column justify-content-end">
+                        <div class="row ml-1 align-items-center justify-content-end">
                             <h5 class="card-title">{{ venue.venuename }} </h5>
                         </div>
                         <p class="card-text ml-1">{{ venue.address }}</p>

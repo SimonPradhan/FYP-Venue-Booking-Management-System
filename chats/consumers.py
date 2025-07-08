@@ -54,7 +54,7 @@ class ChatConsumer(WebsocketConsumer):
             return
         else:
             self.send(text_data=json.dumps({
-                'type': 'chat_message', 
+                'type': 'chat_message',  # Add a 'type' field here
                 'message': message,
                 'user': self.user.username,
             }))
@@ -63,7 +63,7 @@ class ChatConsumer(WebsocketConsumer):
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'user': self.user.username,
+                # 'user': self.user.username,
                 'message': message,
             }
         )

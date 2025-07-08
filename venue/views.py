@@ -11,7 +11,7 @@ from django.shortcuts import render
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 
-from payments.views import khalti
+from payments.views import khalti, invoice
 
 def home(request):
     if 'user_id' in request.session:
@@ -120,6 +120,7 @@ def booking(request):
                 token=payment_payload['token']
             )
             booking.save()
+            invoice(user.email, booking.amount, booking.eventName, booking.id)
             return JsonResponse({'status': 'success'})
         else:
             return JsonResponse({'status': 'failure', 'message': 'Invalid data'})

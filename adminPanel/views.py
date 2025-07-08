@@ -6,6 +6,15 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 # def index(request):
 #     return render(request, 'adminPanel/adminDashboarad.html', {"name":"name"})
+def adminLogin(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        if username == 'admin' and password == 'admin':
+            return redirect('adminPanel:dashboard')
+        else:
+            messages.success(request,('Invalid Credentials!'))
+    return render(request, 'adminPanel/adminLogin.html')
 
 def adminDashboard(request):
     totalVendor = UserVendor.objects.count()
